@@ -1,0 +1,76 @@
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.navigation {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    background-color: rgb(243, 59, 59);
+}
+.navigation div {
+    width: 15%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color:;
+}
+.navigation h4 {
+    margin-bottom: 0%;
+    color: whitesmoke;
+}
+.popover {
+    display: none;
+    width: 80%;
+    height: 60px;
+    background-color: whitesmoke;
+}
+
+.posts:hover .popover{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    list-style-type: none;
+}
+
+.ballot {
+    width: 60%;
+    height: 300px;
+    border: 1px solid whitesmoke;
+    border-radius: 4px;
+    margin: 60px auto;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: whitesmoke;
+}
+h1 {
+    text-align: center;
+}
+form {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+form ul {
+    align-self: flex-start;
+    list-style-type: none;
+}
+form input[type="submit"] {
+    padding:5px;
+    height: fit-content;
+    background-color: rgb(243, 59, 59);
+    color: white;
+    border-radius: 4px;
+    border: 0;
+    font-size: 15px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
+}
+button {
+    float:right;
+}

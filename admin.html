@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles/admin.css">
+        <link rel="stylesheet" href="styles/candidates.css">
+        <title>eVoting</title>
+    </head>
+    <body>
+        <header>
+            <h1>iKURA</h1>
+        </header>
+        <section class="posts">
+            <h2>Election Positions</h2>
+            <ul>
+                <li>post1</li>
+                <li>post1</li>
+                <li>post1</li>
+                <li>post1</li>
+                <li>post1</li>
+            </ul>
+            <fieldset>
+                <legend>Add New Position</legend>
+                <form>
+                    <input type="text" name="addPost" placeholder="Position Name">
+                    <br>
+                    <input type="submit" value="Add position">
+                </form>
+            </fieldset>
+            <br>
+            <fieldset>
+                <legend>Delete Post</legend>
+                <form>
+                    <form>
+                        <input type="number" name="DeletePost" placeholder="Enter postID">
+                        <br>
+                        <input type="submit" value="Delete">
+                    </form>
+                </form>
+            </fieldset>
+        <button>Clear Posts</button>            
+        </section>
+        <section class="candidates">
+            <h2>Candidates</h2>
+            <fieldset class="filter">
+                <legend>Filter candidates position</legend>
+                <form>
+                    <input type="text" name="postfilter" size="50">
+                    <input type="submit" value="Search">
+                </form>
+            </fieldset>
+            <ul>
+                <li>Candidate 1</li>
+                <li>Candidate 2</li>
+                <li>Candidate 3</li>
+            </ul>
+            <fieldset class="add">
+                <legend>Add Candidate</legend>
+                <form>
+                    <label for="addCandidate">Student ID: </label>
+                    <input type="number" name="addCandidate">
+                    <br>
+                    <br>
+                    <label for="MyPost">Post ID: </label>
+                    <input type="number" name="MyPost">
+                    <br>
+                    <input type="submit" value="Add Candidate">
+                </form>
+            </fieldset>
+        <button>Clear Candidates</button>
+        </section>
+        
+        
+        
+       
+        

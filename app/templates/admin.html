@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="../static/styles/admin.css">
+        <link rel="stylesheet" type="text/css" href="../static/styles/candidates.css">
+        <title>eVoting</title>
+    </head>
+    <body>
+        <header>
+            <h1>iKURA</h1>
+        </header>
+        <section class="posts">
+            <h2>Election Positions</h2>
+            <ul>
+            {% for position in positions %}
+				<li>{{position.post}}</li>
+            {% endfor %}
+			</ul>
+            <fieldset>
+                <legend>Add New Position</legend>
+                <form>
+                    <input type="text" name="addPost" placeholder="Position Name">
+                    <br>
+                    <button type="submit">Add position</button>
+                </form>
+            </fieldset>
+            <br>
+            <fieldset>
+                <legend>Delete Post</legend>
+                <form>
+                    <form>
+                        <input type="number" name="DeletePost" placeholder="Enter postID">
+                        <br>
+                        <button type="submit">Delete</button>
+                    </form>
+                </form>
+            </fieldset>
+        <button>Clear Posts</button>            
+        </section>
+        <section class="candidates">
+            <h2>Candidates</h2>
+            <fieldset class="filter">
+                <legend>Filter candidates position</legend>
+                <form>
+                    <input type="text" name="postfilter" size="50">
+                    <button type="submit">Search</button>
+                </form>
+            </fieldset>
+            <ul>
+			    <table>
+			        <thead>
+				        <tr>
+					       <th>ID</th>
+					       <th>Name</th>
+					       <th>Position</th>
+					    </tr>
+				    </thead>
+			        <tbody>
+                    {% for cand in candidates %}
+                        <tr>
+				            <td>{{cand.voter_id}}</td>
+					        <td>{{cand.details.name}}</td>
+					        <td>{{cand.post_id}}</td>
+					    </tr>
+                    {% endfor %}
+				    </tbody>
+			    </table>
+            </ul>
+            <fieldset class="add">
+                <legend>Add Candidate</legend>
+                <form>
+                    <label for="addCandidate">Student ID: </label>
+                    <input type="number" name="addCandidate">
+                    <br>
+                    <br>
+                    <label for="MyPost">Post ID: </label>
+                    <input type="number" name="MyPost">
+                    <br>
+                    <button type="submit">Add</button>
+                </form>
+            </fieldset>
+        <button>Clear Candidates</button>
+        </section>
+        

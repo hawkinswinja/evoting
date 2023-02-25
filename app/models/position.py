@@ -12,4 +12,4 @@ class Position(Base):
     post = Column(String(50), primary_key=True)
 
 	# relationship with candidates
-    positions= relationship("Candidate", cascade="all,delete", backref='contestants')
+    positions= relationship("Candidate", cascade="all,delete")

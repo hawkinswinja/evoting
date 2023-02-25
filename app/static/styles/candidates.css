@@ -1,22 +1,17 @@
 .candidates {
-    width: 60%;
+    width: 55%;
     height: 70vh;
     border: solid 2px rgb(243, 60, 60);
     border-radius: 4px;
-    padding: 30px;
+    padding-left: 30px;
     display: flex;
     flex-flow:row wrap;
-    align-items: center;
-    align-content: flex-start;
+    align-content: center;
     margin:auto;
 }
 .filter {
     width: 80%;
 }
-.candidates ul {
-    margin-right: 30px;
-}
 .add {
-    margin: auto;
-    margin-right: 200px;
+    margin-right: 50%;
 }

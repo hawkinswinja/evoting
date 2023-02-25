@@ -43,9 +43,11 @@ h2 {
     margin-bottom:0;
 }
 fieldset {
-    width:300px;
+    width:fit-content;
     height:fit-content;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     border-color: rgb(243, 60, 60);
     border-radius: 4px;
 }
@@ -54,7 +56,7 @@ button[type="submit"] {
     border:solid 1px rgb(243, 59, 59);
     border-radius: 4px;
     color: white;
-    margin: auto;
+    margin-top: 10px;
 }
 button {
     background-color: rgb(243, 60, 60);

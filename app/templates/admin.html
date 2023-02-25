@@ -14,13 +14,14 @@
             <h2>Election Positions</h2>
             <ul>
             {% for position in positions %}
-				<li>{{position.post}}</li>
+				<li>{{ position }}</li>
             {% endfor %}
 			</ul>
             <fieldset>
                 <legend>Add New Position</legend>
-                <form>
-                    <input type="text" name="addPost" placeholder="Position Name">
+                <form action="/add" method="POST">
+				    <input type="hidden" name="form_id" value="position">
+                    <input type="text" name="Position" placeholder="Position Name">
                     <br>
                     <button type="submit">Add position</button>
                 </form>
@@ -28,13 +29,11 @@
             <br>
             <fieldset>
                 <legend>Delete Post</legend>
-                <form>
-                    <form>
-                        <input type="number" name="DeletePost" placeholder="Enter postID">
+                    <form action="/delete" method="POST">
+                        <input type="text" name="post_id" placeholder="Enter position to delete">
                         <br>
                         <button type="submit">Delete</button>
                     </form>
-                </form>
             </fieldset>
         <button>Clear Posts</button>            
         </section>
@@ -42,8 +41,8 @@
             <h2>Candidates</h2>
             <fieldset class="filter">
                 <legend>Filter candidates position</legend>
-                <form>
-                    <input type="text" name="postfilter" size="50">
+                <form id='filter'>
+                    <input type="text" name="filterpost" size="50">
                     <button type="submit">Search</button>
                 </form>
             </fieldset>
@@ -69,13 +68,14 @@
             </ul>
             <fieldset class="add">
                 <legend>Add Candidate</legend>
-                <form>
-                    <label for="addCandidate">Student ID: </label>
-                    <input type="number" name="addCandidate">
+                <form action="/add" method="POST">
+				    <input type="hidden" name="form_id" value="candidate">
+                    <label for="voter_id">Voter ID: </label>
+                    <input type="number" name="voter_id">
                     <br>
                     <br>
-                    <label for="MyPost">Post ID: </label>
-                    <input type="number" name="MyPost">
+                    <label for="post_id">Position: </label>
+                    <input type="text" name="post_id">
                     <br>
                     <button type="submit">Add</button>
                 </form>

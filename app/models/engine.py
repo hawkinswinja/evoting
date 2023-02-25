@@ -40,10 +40,10 @@ class Engine:
         """commit changes to database"""
         self.__session.commit()
 
-    def delete(self, cls, item):
+    def delete(self, cls, item=None):
         """delete an existing record"""
         obj = eval(cls)
-        if values is None:
+        if item is None:
             self.__session.query(obj).delete(synchronize_session=False)
         else:
             self.__session.delete(self.show(cls, item))

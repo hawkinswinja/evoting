@@ -4,11 +4,14 @@
         <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="../static/styles/admin.css">
         <link rel="stylesheet" type="text/css" href="../static/styles/candidates.css">
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="{{ url_for('static', filename='scripts/admin.js') }}"></script>
         <title>eVoting</title>
     </head>
     <body>
         <header>
             <h1>iKURA</h1>
+			<div class="exit">Exit</div>
         </header>
         <section class="posts">
             <h2>Election Positions</h2>
@@ -35,36 +38,20 @@
                         <button type="submit">Delete</button>
                     </form>
             </fieldset>
-        <button>Clear Posts</button>            
+        <button name="clearposts">Clear Posts</button>            
         </section>
         <section class="candidates">
             <h2>Candidates</h2>
             <fieldset class="filter">
                 <legend>Filter candidates position</legend>
-                <form id='filter'>
-                    <input type="text" name="filterpost" size="50">
-                    <button type="submit">Search</button>
-                </form>
+                <input type="text" id="filterpost">
+                <button id="search">Search</button>
             </fieldset>
-            <ul>
-			    <table>
-			        <thead>
-				        <tr>
-					       <th>ID</th>
-					       <th>Name</th>
-					       <th>Position</th>
-					    </tr>
-				    </thead>
-			        <tbody>
+            <ul id="candidates">
+				<h3>ID&ensp;Name&ensp;Position</h3>
                     {% for cand in candidates %}
-                        <tr>
-				            <td>{{cand.voter_id}}</td>
-					        <td>{{cand.details.name}}</td>
-					        <td>{{cand.post_id}}</td>
-					    </tr>
+						<li>{{cand.id}}&ensp;{{cand.name}}&emsp;{{cand.post}}</li>
                     {% endfor %}
-				    </tbody>
-			    </table>
             </ul>
             <fieldset class="add">
                 <legend>Add Candidate</legend>
@@ -80,6 +67,7 @@
                     <button type="submit">Add</button>
                 </form>
             </fieldset>
-        <button>Clear Candidates</button>
+        <button name="clearcands">Clear Candidates</button>
         </section>
-        
+    </body>
+</html>

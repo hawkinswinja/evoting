@@ -7,18 +7,25 @@ header {
     width: 100%;
     height:60px;
     display:flex;
-    flex-direction: column;
-    align-items: center;
+    flex-flow: row wrap;
     text-align: center;
     background-color:rgb(243, 59, 59);
     color: white;
     margin-bottom:30px;
 }
 header h1 {
-    margin:0%;
+    margin: 0 45%;
 }
 h4 {
     margin: 0%;
+}
+.exit {
+	width: 6%;
+	height: fit-content;
+	background-color: whitesmoke;
+	margin-left: 95%;
+	border-radius: 10px;
+	color: rgb(243, 60, 60);
 }
 .posts {
     width: fit-content;

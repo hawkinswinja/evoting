@@ -26,8 +26,8 @@
                 <ul>
 				{% for candidate in candidates %}
                     <li>
-                        <input type="radio" name="{{ post }}" value="{{ candidate }}">
-                        <label for="{{ candidate }}">{{ candidate }}</label>
+                        <input type="radio" name="{{ post }}" value="{{ candidate.id }}">
+                        <label for="{{ candidate.id }}">{{ candidate.name }}</label>
                     </li>
 				{% endfor %}
                 </ul>

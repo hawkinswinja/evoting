@@ -3,18 +3,16 @@
 from models import storage
 from flask import Flask, redirect, url_for, request, jsonify, render_template
 
-
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
 @app.route('/admin')
 def admin():
     """access the admin page"""
-    positions = get_posts()
-    return render_template('admin.html', positions=positions, candidates=storage.all('Candidate'))
+    return render_template('admin.html', positions=get_posts(), candidates=get_candidates())
 
-@app.route('/auth', methods=['GET', 'POST'])
-def auth():
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     """performs authentication access"""
     if request.method == 'GET':
         return render_template('login.html')
@@ -40,13 +38,19 @@ def vote(myid, post):
     """access the ballot page"""
     return render_template('ballot.html', myid=myid, post=post, positions=get_posts(), candidates=get_candidates(post))
 
-@app.route('/<position>/candidates')
-def get_candidates(position):
+@app.route('/candidates')
+@app.route('/candidates/<string:position>')
+def get_candidates(position=None):
     """return dictionary of lists of candidates"""
-    post = storage.show('Position', position)
     post_candidates = []
-    for user in post.positions:
-        post_candidates.append(user.details.name)
+    if position:
+        post = storage.show('Position', position)
+        for user in post.positions:
+            post_candidates.append({'id':user.voter_id, 'name':user.details.name, 'post':user.post_id})
+    else:
+        cands = storage.all('Candidate')
+        for user in cands:
+            post_candidates.append({'id':user.voter_id, 'name':user.details.name, 'post':user.post_id})
     return post_candidates
 
 @app.route('/add', methods=['POST'])
@@ -75,11 +79,16 @@ def delete():
     except Exception as e:
         return jsonify(str(e))
     storage.save()
-    return redirect('/admin')
+    return
 
-
-
-
+@app.route('/clear/<obj>')
+def clear(obj):
+    if obj == 'posts':
+        storage.delete('Position')
+    else:
+        storage.delete('Candidate')
+    storage.save()
+    return redirect('/admin'), 200
 
 
 if __name__ == "__main__":

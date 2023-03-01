@@ -11,5 +11,6 @@ class Candidate(Base):
 
     voter_id = Column(Integer, ForeignKey('voters.id', ondelete='CASCADE'), primary_key=True)
     post_id = Column(String(50), ForeignKey('positions.post'))
+    votes = Column(Integer, default=0)
 
     details = relationship("Voter")

@@ -3,38 +3,40 @@
     <head>
         <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="/static/styles/ballot.css">
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
         <title>eVoting</title>
     </head>
     <body>
-        <header></header>
-        <section class="navigation">
+        <header class="navigation">
             <div class="posts">
-                <h4>Election positions</h4>
+                <h4>Positions</h4>
                 <ul class="popover">
 			    {% for position in positions %}
                     <li><a href="{{ url_for('vote', myid=myid, post=position) }}">{{ position }}</a></li>
 				{% endfor %}
                 </ul>
             </div>
-            <div><h4>My-Selection</h4></div>
             <div><h4>E-results</h4></div>
-        </section>
+            <button class='exit'>Exit</button>
+        </header>
         <section class="ballot">
             <h1>Election for {{ post }}</h1>
-			Candidates for this position. Select your preffered candidate
-            <form method="post">
+            <form action="/tally" id="ballot_form" method="post">
+			    Select your prefered candidate from the list
                 <ul>
-				{% for candidate in candidates %}
-                    <li>
-                        <input type="radio" name="{{ post }}" value="{{ candidate.id }}">
-                        <label for="{{ candidate.id }}">{{ candidate.name }}</label>
-                    </li>
+				{% for k, v in candidates.items() %}
+					<li>
+						<label>
+                        	<input type="radio" name='cand_id' value="{{ k }}">
+							<span>{{v.name}}</span>
+                    	</label>
+					</li>
 				{% endfor %}
                 </ul>
+                <em>Click the button <strong>Vote</strong> to confirm your selected candidate</em>
                 <input type="submit" value="Vote">
-                <em>Click the vote button to save your preferred candidate</em>
             </form>
         </section>
-        <button>Next</button>
     </body>
 </html>

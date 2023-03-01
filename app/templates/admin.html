@@ -5,13 +5,13 @@
         <link rel="stylesheet" type="text/css" href="../static/styles/admin.css">
         <link rel="stylesheet" type="text/css" href="../static/styles/candidates.css">
 		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-        <script src="{{ url_for('static', filename='scripts/admin.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
         <title>eVoting</title>
     </head>
     <body>
         <header>
             <h1>iKURA</h1>
-			<div class="exit">Exit</div>
+			<button class="exit">Exit</button>
         </header>
         <section class="posts">
             <h2>Election Positions</h2>
@@ -49,8 +49,8 @@
             </fieldset>
             <ul id="candidates">
 				<h3>ID&ensp;Name&ensp;Position</h3>
-                    {% for cand in candidates %}
-						<li>{{cand.id}}&ensp;{{cand.name}}&emsp;{{cand.post}}</li>
+                    {% for k, v in candidates.items() %}
+						<li>{{k}}&ensp;{{v.name}}&emsp;{{v.post}}</li>
                     {% endfor %}
             </ul>
             <fieldset class="add">

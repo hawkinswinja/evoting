@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="../static/styles/admin.css">
+        <link rel="stylesheet" type="text/css" href="../static/styles/candidates.css">
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+        <title>eVoting</title>
+    </head>
+    <body>
+        <header>
+            <h1>iKURA</h1>
+			<button class="exit">Exit</button>
+        </header>
+        <section class="candidates">
+            <h2>Election Results</h2>
+            <fieldset class="filter">
+                <legend>Filter positions</legend>
+                <input type="text" id="filterpost">
+                <button name="results">Search</button>
+            </fieldset>
+			<ul id="candidates">
+				<h3>Name&emsp;Position&ensp;Votes</h3>
+                   	{% for k, v in candidates.items() %}
+						<li>{{v.name}}&emsp;{{v.post}}&emsp;{{v.votes}}</li>
+                   	{% endfor %}
+            </ul>
+        </section>
+    </body>
+</html>

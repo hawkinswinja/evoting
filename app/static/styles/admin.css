@@ -40,8 +40,8 @@ h4 {
 }
 ul {
     list-style-type: none;
-    width: 200px;
-    height: 250px;
+    width: 50%;
+    height: 45%;
     border: solid 1px rgb(243, 60, 60);
     border-radius: 4px;
     padding-top: 20px;
@@ -51,7 +51,7 @@ h2 {
     margin-bottom:0;
 }
 fieldset {
-    width:fit-content;
+    width: 60%;
     height:fit-content;
     display: flex;
     flex-direction: column;

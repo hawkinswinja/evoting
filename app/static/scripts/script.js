@@ -1,11 +1,29 @@
 $(document).ready(function() {
-  $('#search').on('click', function() {
+  $('#results').on('click', () => { window.location = "/e-portal"; });
+
+  $('button[name="results"]').on('click', function() {
       const url = '/candidates/' + $('#filterpost').val();
 	  fetch(url)
 	  .then(response => response.json())
 	  .then(data => {
 		$('#candidates li').remove();
 		const list = document.getElementById('candidates');
+		for (const key in data) {
+			let li = document.createElement('li');
+			li.innerText = data[key].name + '  ' + data[key].post + ' ' + data[key].votes;
+			list.appendChild(li);
+		}
+	  })	  
+	  .catch(error => alert(error));
+  });
+
+  $('#search').on('click', function() {
+      const url = '/candidates/' + $('#filterpost').val();
+	  fetch(url)
+	  .then(response => response.json())
+	  .then(data => {
+		$('#all li').remove();
+		const list = document.getElementById('all');
 		for (const key in data) {
 			let li = document.createElement('li');
 			li.innerText = key + '  ' + data[key].name + '  ' + data[key].post;

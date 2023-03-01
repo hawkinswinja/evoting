@@ -22,11 +22,18 @@ def login():
             if user.name == 'ADMIN':
                 return redirect(url_for('admin'))
             if user.status == 'Not voted':
-                return redirect(url_for('vote', myid=user.id, post=get_posts()[0]))
+                try:
+                    return redirect(url_for('vote', myid=user.id, post=get_posts()[0]))
+                except Exception:
+                    return "No Ongoing Elections"
             else:
                 return jsonify({'message': 'This user has already voted'})
         return jsonify({'error': 'user id does not exist'})
 
+@app.route('/e-portal')
+def portal():
+    """returns the webpage displaying the results"""
+    return render_template('portal.html', candidates=get_candidates())
 
 @app.route('/posts')
 def get_posts():

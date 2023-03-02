@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """entry point to handle requests and update databse"""
+import asyncio
 from models import storage
 from flask import Flask, redirect, url_for, request, jsonify, render_template
 
@@ -21,14 +22,10 @@ def login():
         if request.form['password'] == user.auth_id:
             if user.name == 'ADMIN':
                 return redirect(url_for('admin'))
-            if user.status == 'Not voted':
-                try:
-                    return redirect(url_for('vote', myid=user.id, post=get_posts()[0]))
-                except Exception:
-                    return "No Ongoing Elections"
-            else:
-                return jsonify({'message': 'This user has already voted'})
-        return jsonify({'error': 'user id does not exist'})
+            try:
+                return redirect(url_for('vote', myid=user.id, post=get_posts()[0]))
+            except Exception:
+                return jsonify({'error': 'user id does not exist'})
 
 @app.route('/e-portal')
 def portal():
@@ -87,7 +84,7 @@ def delete():
     except Exception as e:
         return jsonify(str(e))
     storage.save()
-    return
+    return redirect('/admin')
 
 @app.route('/clear/<obj>')
 def clear(obj):
@@ -96,20 +93,30 @@ def clear(obj):
     else:
         storage.delete('Candidate')
     storage.save()
-    return redirect('/admin'), 200
+    return redirect('/admin')
 
 @app.route('/tally', methods=['POST'])
-async def tally():
+def tally():
     """add votes to candidates"""
-    cand_id = int(request.form.get('cand_id'))
-    await(update_votes(cand_id))
-    return 'Success'
     
-async def update_votes(id):
+    return update_votes(int(request.form.get('cand_id')),
+                         request.form.get('voter_id'),
+                         request.form.get('post'))
+    
+def update_votes(cand_id, voter_id, post):
     """updates candidate votes"""
-    user = storage.show('Candidate', id)
-    user.votes += 1
+    voter = storage.show('Voter', voter_id)
+    if voter.status and post in voter.status:
+        return 'voted'
+    if post not in voter.status:
+        voter.status += post
+        return add_votes(cand_id)
+
+def add_votes(cand):
+    """add votes to candidates"""
+    storage.show('Candidate', cand).votes += 1
     storage.save()
+    return 'success'
 
 if __name__ == "__main__":
     """run application"""

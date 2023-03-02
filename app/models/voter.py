@@ -14,5 +14,5 @@ class Voter(Base):
     name = Column(String(50), nullable=False)
     email = Column(String(50), unique=True, nullable=False)
     auth_id = Column(String(50), default=str(uuid.uuid4()))
-    status = Column(String(10), default='Not voted')
+    status = Column(String(200), default='')
 

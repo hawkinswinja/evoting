@@ -4,7 +4,7 @@
         <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="/static/styles/ballot.css">
 		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-		<script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+		<script src="{{ url_for('static', filename='scripts/ballot.js') }}"></script>
         <title>eVoting</title>
     </head>
     <body>
@@ -23,6 +23,8 @@
         <section class="ballot">
             <h1>Election for {{ post }}</h1>
             <form action="/tally" id="ballot_form" method="post">
+			    <input type="hidden" name='voter_id' value='{{ myid }}'>
+			    <input type="hidden" name='post' value='{{ post }}'>
 			    Select your prefered candidate from the list
                 <ul>
 				{% for k, v in candidates.items() %}

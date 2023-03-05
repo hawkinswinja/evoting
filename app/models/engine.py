@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 """this module creates the engine that links to MySQL database"""
+import pymysql
 from sqlalchemy.orm import (sessionmaker, scoped_session)
 from sqlalchemy import create_engine
+from sqlalchemy.exc import SQLAlchemyError
 from models.voter import (Voter, Base)
 from models.position import Position
 from models.candidate import Candidate
@@ -34,7 +36,10 @@ class Engine:
             obj = eval(cls)()
             for k, v in me.items():
                 setattr(obj, k, v)
+        try:
             self.__session.add(obj)
+        except SQLAlchemyError:
+            print("Failed to update")
 
     def save(self):
         """commit changes to database"""

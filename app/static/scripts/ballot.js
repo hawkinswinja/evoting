@@ -18,9 +18,7 @@ $(document).ready(function() {
 			  dataType: 'text',
 			  data: formData, 
 			  success: function(data) {
-				  if (data == 'voted') { 
-					  alert('Cannot vote again for this position'); } else {
-						  alert('You successfully voted for ' + name); }
+					  alert(data);
 				 },
 			  error: function(xhr, status, error){
 				  alert('Error submitting form ' + error);

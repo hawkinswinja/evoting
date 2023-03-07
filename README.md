@@ -8,7 +8,7 @@ This system allows for voter authentication based on stored data, fast voting pr
 
 For more information you can visit [**iKURA landing page**](https://hawkinswinja.github.io/evoting)<br>
 Also check out my blog on the project at [iKURA project build]()<br>
-linkedin profile: [hawkinswinja](linkedin.com/in/hawkinswinja/)
+linkedin profile: [hawkinswinja](https://linkedin.com/in/hawkinswinja/)
 
 ## Installation
 ### Prerequisites

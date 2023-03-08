@@ -46,4 +46,5 @@ The following are simlar projects working on the same concept on digital voting 
 
 ## License
 
-This project is licensed for public view.
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License v3.0.
+See the GNU General Public License for more details

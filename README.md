@@ -7,7 +7,7 @@ iKURA voting system is an online system that allows institutions to conduct elec
 This system allows for voter authentication based on stored data, fast voting process with easy to use interface, and real time votes updates.
 
 For more information you can visit [**iKURA landing page**](https://hawkinswinja.github.io/evoting)<br>
-Also check out my blog on the project at [iKURA project build]()<br>
+Also check out my blog on the project at [Working My First Project](https://www.linkedin.com/pulse/working-my-first-project-gilbert-winja)<br>
 linkedin profile: [hawkinswinja](https://linkedin.com/in/hawkinswinja/)
 
 ## Installation

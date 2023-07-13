@@ -1,58 +1,63 @@
-#!/usr/bin/python3
-"""entry point to handle requests and update databse"""
+#!/usr/bin/env python3
+"""routes module
+   defines all the endpoint routes
+"""
+from flask import redirect, url_for, request, jsonify, render_template, abort
 from models import storage
-from flask_cors import CORS
-from flask import Flask, redirect, url_for, request, jsonify, render_template, abort
-
-app = Flask(__name__)
-cors = CORS(app, resources={"r/*": {"origins": "0.0.0.0"}})
-app.url_map.strict_slashes = False
+from . import bp
 
 
-@app.route('/admin')
+@bp.route('/admin')
 def admin():
     """access the admin page"""
     positions = get_posts()
     candidates = get_candidates()
-    return render_template('admin.html', positions=positions, candidates=candidates)
+    return render_template('admin.html', positions=positions,
+                           candidates=candidates)
 
-@app.route('/login', methods=['GET', 'POST'])
+
+@bp.route('/login', methods=['GET', 'POST'])
 def login():
     """performs authentication access"""
     if request.method == 'GET':
         return render_template('login.html')
     try:
-       user = storage.show('Voter', int(request.form['user-id']))
+        user = storage.show('Voter', int(request.form['user-id']))
     except Exception:
-       return abort(404, 'user id does not exist')
+        return abort(404, 'user id does not exist')
     if request.form['password'] == user.auth_id:
-       if user.name == 'ADMIN':
+        if user.name == 'ADMIN':
             return redirect(url_for('admin'))
-       else:
+        else:
             return redirect(url_for('vote', myid=user.id, post=get_posts()[0]))
     else:
         return abort(404, 'incorrect password')
 
-@app.route('/e-portal')
+
+@bp.route('/e-portal')
 def portal():
     """returns the webpage displaying the results"""
     return render_template('portal.html', candidates=get_candidates())
 
-@app.route('/posts')
+
+@bp.route('/posts')
 def get_posts():
     """return a list of election posts"""
     election_posts = [post.post for post in (storage.all('Position'))]
     return election_posts
 
-@app.route('/vote/<int:myid>/<post>')
+
+@bp.route('/vote/<int:myid>/<post>')
 def vote(myid, post):
     """access the ballot page"""
     positions = get_posts()
     cands = get_candidates(post)
-    return render_template('ballot.html', myid=myid, post=post, positions=positions, candidates=cands)
+    return render_template('ballot.html', myid=myid, post=post,
+                           positions=positions, candidates=cands)
 
-@app.route('/candidates')
-@app.route('/candidates/<string:position>')
+
+@bp.route('/candidates')
+@bp.route('/candidates/<string:position>')
 def get_candidates(position=None):
     """return dictionary of lists of candidates"""
     post_candidates = {}
@@ -60,35 +65,47 @@ def get_candidates(position=None):
         try:
             post = storage.show('Position', position)
             for user in post.positions:
-                post_candidates[user.voter_id] = {'name':user.details.name, 'post':user.post_id, 'votes': user.votes}
-        except:
+                post_candidates[user.voter_id] = {'name': user.details.name,
+                                                  'post': user.post_id,
+                                                  'votes': user.votes
+                                                  }
+        except Exception:
             return abort(404, 'This position does not exist')
     else:
         cands = storage.all('Candidate')
         for user in cands:
-            post_candidates[user.voter_id] = {'name':user.details.name, 'post':user.post_id, 'votes': user.votes}
+            post_candidates[user.voter_id] = {'name': user.details.name,
+                                              'post': user.post_id,
+                                              'votes': user.votes
+                                              }
     return post_candidates
 
-@app.route('/add', methods=['POST'])
+
+@bp.route('/add', methods=['POST'])
 def add():
     """handle form events"""
     if request.form.get('form_id') == 'position':
         post = request.form.get('Position')
         if post in get_posts():
-            return jsonify("Position cannot be null or similar.\nEnsure the position does not already exist")
+            return jsonify("Position cannot be null or similar.\n\
+                           Ensure the position does not already exist")
         else:
             storage.new('Position', {'post': request.form.get('Position')})
     if request.form.get('form_id') == 'candidate':
         cand = request.form.get('voter_id')
-        candlist =  get_candidates().keys()
+        candlist = get_candidates().keys()
         if cand in candlist:
-            return jsonify("This Candidate already registered for a different position")
+            return jsonify("Candidate already registered")
         else:
-            storage.new('Candidate', {'voter_id': cand, 'post_id': request.form.get('post_id')})
+            storage.new('Candidate',
+                        {'voter_id': cand,
+                         'post_id': request.form.get('post_id')
+                         })
     storage.save()
     return redirect('/admin')
 
-@app.route('/delete', methods=['POST'])
+
+@bp.route('/delete', methods=['POST'])
 def delete():
     """delete items from database"""
     val = request.form.get('post_id')
@@ -99,7 +116,8 @@ def delete():
     storage.save()
     return redirect('/admin')
 
-@app.route('/clear/<obj>')
+
+@bp.route('/clear/<obj>')
 def clear(obj):
     if obj == 'posts':
         storage.delete('Position')
@@ -108,14 +126,15 @@ def clear(obj):
     storage.save()
     return redirect('/admin')
 
-@app.route('/tally', methods=['POST'])
+
+@bp.route('/tally', methods=['POST'])
 def tally():
     """add votes to candidates"""
-    
     return update_votes(int(request.form.get('cand_id')),
-                         request.form.get('voter_id'),
-                         request.form.get('post'))
-    
+                        request.form.get('voter_id'),
+                        request.form.get('post'))
+
+
 def update_votes(cand_id, voter_id, post):
     """updates candidate votes"""
     voter = storage.show('Voter', voter_id)
@@ -124,15 +143,12 @@ def update_votes(cand_id, voter_id, post):
     voter.status += post
     return add_votes(cand_id)
 
+
 def add_votes(cand):
     """add votes to candidates"""
     try:
         storage.show('Candidate', cand).votes += 1
         storage.save()
     except Exception:
-        return  ("Please refresh the page to vote again")
+        return "Please refresh the page to vote again"
     return 'Your vote was successfully recorded'
-
-if __name__ == "__main__":
-    """run application"""
-    app.run(host='0.0.0.0', port=5000, debug=False)

@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """this module creates the engine that links to MySQL database"""
-import pymysql
 from sqlalchemy.orm import (sessionmaker, scoped_session)
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError

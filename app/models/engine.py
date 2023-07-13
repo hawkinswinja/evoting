@@ -19,6 +19,10 @@ class Engine:
         self.__engine = create_engine('mysql+mysqldb://root:root@localhost/evoting')
         #map all subclasses of Base to create mysql tables
         Base.metadata.create_all(self.__engine)
+
+    def destroy(self):
+        """Destroy the current db and all its contents"""
+        Base.metadata.destroy_all()
         
     def reload(self):
         """reloads all created contents of the database"""
@@ -36,7 +40,7 @@ class Engine:
             string cls: class name used to create instance object
             dict me: dictionary definition for new object to create
         """
-        #do nothing when the dictionary item me is NULL
+        # do nothing when the dictionary item me is NULL
         if me is None:
             return
         else:
@@ -45,23 +49,23 @@ class Engine:
                 setattr(obj, k, v)
         try:
             self.__session.add(obj)
-        except SQLAlchemyError: #NOT WORKING NEEDS updates!!
+        except SQLAlchemyError: # NOT WORKING NEEDS updates!!
             print("Failed to update")
 
     def save(self):
         """commit changes to database"""
         self.__session.commit()
 
-    def delete(self, cls, item=None):
-        """delete an existing record"""
-        #create object from passed class name
+    def delete(self, cls, id=None):
+        """delete an existing record using the primary key"""
+        # create object from passed class name
         obj = eval(cls)
-        #delete all stored objects if item is missing
-        if item is None:
+        # delete all stored objects if item is missing
+        if id is None:
             self.__session.query(obj).delete(synchronize_session=False)
         else:
-            #fetch an object using its primary key and delete it
-            self.__session.delete(self.show(cls, item))
+            # fetch an object using its primary key and delete it
+            self.__session.delete(self.show(cls, id))
 
     def show(self, cls, cls_id):
         """returns an object using the primary key"""

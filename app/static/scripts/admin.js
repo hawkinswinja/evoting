@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  $('#results').on('click', () => { window.location = "/e-portal"; });
+  $('#results').on('click', () => { window.location.replace = "/e-portal"; });
 
   $('#search').on('click', function() {
       const url = '/candidates/' + $('#filterpost').val();

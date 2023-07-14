@@ -2,9 +2,21 @@
 """routes module
    defines all the endpoint routes
 """
-from flask import redirect, url_for, request, jsonify, render_template, abort
+from flask import (redirect, url_for, request,
+                   jsonify, render_template, abort, session)
 from models import storage, auth
 from views import bp
+
+
+@bp.before_request
+def before():
+    if request.endpoint.split('.')[-1] != 'login':
+        if not session.get('user'):
+            return redirect(url_for('views.login'))
+    else:
+        user = session.get('user')
+        if user:
+            session.pop('user')
 
 
 @bp.route('/admin')
@@ -26,10 +38,12 @@ def login():
     except Exception:
         return abort(404, 'user id does not exist')
     if auth.validate(request.form['password'], user.auth_id):
+        session['user'] = user.id
         if user.name == 'admin':
             return redirect(url_for('views.admin'))
         else:
-            return redirect(url_for('views.vote', myid=user.id, post=get_posts()[0]))
+            return redirect(url_for('views.vote', myid=user.id,
+                                    post=get_posts()[0]))
     else:
         return abort(404, 'incorrect password')
 

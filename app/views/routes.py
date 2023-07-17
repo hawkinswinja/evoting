@@ -2,8 +2,8 @@
 """routes module
    defines all the endpoint routes
 """
-from flask import (redirect, url_for, request,
-                   jsonify, render_template, abort, session)
+from flask import (redirect, url_for, request, jsonify, render_template, abort,
+                   session, after_this_request)
 from models import storage, auth
 from views import bp
 
@@ -16,7 +16,7 @@ def before():
     else:
         user = session.get('user')
         if user:
-            session.pop('user')
+            session.pop('user', None)
 
 
 @bp.route('/admin')
@@ -24,6 +24,14 @@ def admin():
     """access the admin page"""
     positions = get_posts()
     candidates = get_candidates()
+
+    @after_this_request
+    def add_cache_control_headers(response):
+        response.headers['Cache-Control'] = 'no-store, no-cache,\
+must-revalidate, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '-1'
+        return response
     return render_template('admin.html', positions=positions,
                            candidates=candidates)
 
@@ -66,6 +74,14 @@ def vote(myid, post):
     """access the ballot page"""
     positions = get_posts()
     cands = get_candidates(post)
+
+    @after_this_request
+    def add_cache_control_headers(response):
+        response.headers['Cache-Control'] = 'no-store, no-cache,\
+must-revalidate, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '-1'
+        return response
     return render_template('ballot.html', myid=myid, post=post,
                            positions=positions, candidates=cands)
 

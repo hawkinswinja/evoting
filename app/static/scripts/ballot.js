@@ -1,7 +1,31 @@
 $(document).ready(function() {
   $('#results').on('click', () => { window.location = "/e-portal"; });
 
-  $('.exit').on('click', () => { window.location = "/login"; });
+  $('.exit').on('click', () => { window.location = "/logout"; });
+
+  $('.vote').on('click', () => {
+	message = 'This action changes your vote status to "voted"\
+and you will no longer be able to make vote changes'
+	const confirmation = confirm(message)
+	
+	if (confirmation) {
+		$.ajax({
+			url: '/vote', 
+			//type: '',
+			dataType: 'text',
+			//data: formData, 
+			success: function(data) {
+					alert(data);
+			   },
+			error: function(xhr, status, error) {
+				alert('Error submitting form ' + error);
+			   }
+		});
+
+	    window.location = "/e-portal";
+	}
+  });
+
   
   $('#ballot_form').submit(function(event) {
 	  event.preventDefault(); //prevent the form from submitting

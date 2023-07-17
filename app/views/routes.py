@@ -2,21 +2,11 @@
 """routes module
    defines all the endpoint routes
 """
+import json
 from flask import (redirect, url_for, request, jsonify, render_template, abort,
-                   session, after_this_request)
+                   session)
 from models import storage, auth
 from views import bp
-
-
-@bp.before_request
-def before():
-    if request.endpoint.split('.')[-1] != 'login':
-        if not session.get('user'):
-            return redirect(url_for('views.login'))
-    else:
-        user = session.get('user')
-        if user:
-            session.pop('user', None)
 
 
 @bp.route('/admin')
@@ -25,13 +15,6 @@ def admin():
     positions = get_posts()
     candidates = get_candidates()
 
-    @after_this_request
-    def add_cache_control_headers(response):
-        response.headers['Cache-Control'] = 'no-store, no-cache,\
-must-revalidate, max-age=0'
-        response.headers['Pragma'] = 'no-cache'
-        response.headers['Expires'] = '-1'
-        return response
     return render_template('admin.html', positions=positions,
                            candidates=candidates)
 
@@ -46,14 +29,23 @@ def login():
     except Exception:
         return abort(404, 'user id does not exist')
     if auth.validate(request.form['password'], user.auth_id):
-        session['user'] = user.id
-        if user.name == 'admin':
+        session['user_id'] = user.id
+        if user.id == 1:
             return redirect(url_for('views.admin'))
         else:
+            if user.status != 'voted':
+                session['candidates'] = json.dumps({})
             return redirect(url_for('views.vote', myid=user.id,
                                     post=get_posts()[0]))
     else:
         return abort(404, 'incorrect password')
+
+
+@bp.route('/logout')
+def logout():
+    """removes user id from session"""
+    session.pop('user_id')
+    return redirect(url_for('views.login'))
 
 
 @bp.route('/e-portal')
@@ -72,18 +64,13 @@ def get_posts():
 @bp.route('/vote/<int:myid>/<post>')
 def vote(myid, post):
     """access the ballot page"""
-    positions = get_posts()
-    cands = get_candidates(post)
-
-    @after_this_request
-    def add_cache_control_headers(response):
-        response.headers['Cache-Control'] = 'no-store, no-cache,\
-must-revalidate, max-age=0'
-        response.headers['Pragma'] = 'no-cache'
-        response.headers['Expires'] = '-1'
-        return response
+    voter = storage.show('Voter', int(session['user_id']))
+    if voter.status == 'voted':
+        # flash('You already voted in this election', 'message')
+        return redirect(url_for('views.portal'))
     return render_template('ballot.html', myid=myid, post=post,
-                           positions=positions, candidates=cands)
+                           positions=get_posts(),
+                           candidates=get_candidates(post))
 
 
 @bp.route('/candidates')
@@ -160,25 +147,32 @@ def clear(obj):
 @bp.route('/tally', methods=['POST'])
 def tally():
     """add votes to candidates"""
-    return update_votes(int(request.form.get('cand_id')),
-                        request.form.get('voter_id'),
-                        request.form.get('post'))
+    cands = json.loads(session['candidates'])
+    cands[request.form['post']] = request.form.get('cand_id')
+    session['candidates'] = json.dumps(cands)
+    return 'vote successfully recorded'
 
 
-def update_votes(cand_id, voter_id, post):
-    """updates candidate votes"""
-    voter = storage.show('Voter', voter_id)
-    if voter.status and post in voter.status:
-        return ("You already voted for this position")
-    voter.status += post
-    return add_votes(cand_id)
+@bp.route('/<int:myid>/selection')
+def selection(myid):
+    """display voter's selected candidates"""
+    cands = session.get('candidates')
+    if cands:
+        cands = json.loads(cands)
+        candidates = [v for k, v in get_candidates().items()
+                      if str(k) in cands.values()]
+    else:
+        candidates = {}
+    return render_template('choice.html', myid=myid, candidates=candidates,
+                           posts=get_posts())
 
 
-def add_votes(cand):
+@bp.route('/vote')
+def add_votes():
     """add votes to candidates"""
-    try:
-        storage.show('Candidate', cand).votes += 1
-        storage.save()
-    except Exception:
-        return "Please refresh the page to vote again"
+    for cand in json.loads(session['candidates']).values():
+        storage.show('Candidate', int(cand)).votes += 1
+    storage.show('Voter', int(session['user_id'])).status = 'voted'
+    storage.save()
+    # flash 'Your vote was successfully recorded'
     return 'Your vote was successfully recorded'

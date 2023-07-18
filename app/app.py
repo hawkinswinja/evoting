@@ -2,12 +2,12 @@
 """entry point to handle requests and update databse"""
 from flask_cors import CORS
 from flask import Flask, request, session, redirect, url_for
-from os import getenv
+from config import Config
 
 app = Flask(__name__)
 cors = CORS(app, resources={"r/*": {"origins": "0.0.0.0"}})
 app.url_map.strict_slashes = False
-app.secret_key = getenv('SK')
+app.config.from_object(Config)
 
 
 @app.before_request

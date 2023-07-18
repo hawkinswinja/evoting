@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """this module creates the engine that links to MySQL database"""
+from os import getenv
 from sqlalchemy.orm import (sessionmaker, scoped_session)
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
@@ -15,24 +16,34 @@ class Engine:
 
     def __init__(self):
         """initializes the SQL database"""
-        #create the connector engine for sqlalchemy
-        self.__engine = create_engine('mysql+mysqldb://root:root@localhost/evoting')
-        #map all subclasses of Base to create mysql tables
+        user = getenv('USER')
+        host = getenv('HOST')
+        pw = getenv('PW')
+        db = getenv('DB')
+        dbtype = getenv('DT')
+        url = f'//{user}:{pw}@{host}/{db}'
+
+        if dbtype == 'mysql':
+            self.__engine = create_engine('mysql+mysqldb:' + url)
+        else:
+            self.__engine = create_engine('postgresql+psycopg2:' + url)
+
+        # map all subclasses of Base to create the database
         Base.metadata.create_all(self.__engine)
 
     def destroy(self):
         """Destroy the current db and all its contents"""
         Base.metadata.destroy_all()
-        
+
     def reload(self):
         """reloads all created contents of the database"""
-        #create the engine session
+        # create the engine session
         self.__session = scoped_session(sessionmaker(bind=self.__engine,
                                                      expire_on_commit=False))
 
     def all(self, cls):
         """returns all instances of object specified in cls"""
-        return(self.__session.query(eval(cls)).all())
+        return (self.__session.query(eval(cls)).all())
 
     def new(self, cls, me=None):
         """
@@ -49,7 +60,7 @@ class Engine:
                 setattr(obj, k, v)
         try:
             self.__session.add(obj)
-        except SQLAlchemyError: # NOT WORKING NEEDS updates!!
+        except SQLAlchemyError:  # NOT WORKING NEEDS updates!!
             print("Failed to update")
 
     def save(self):

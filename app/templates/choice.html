@@ -24,18 +24,22 @@
             <h1>Submit Votes</h1>
             <section id="ballot_form">
                 <h3>Position&emsp;Candidate</h3>
-                {% if candidates|length == 0 %}
+                {% if cands|length == 0 %}
                     <h4>Kindly select a candidate to be able to vote</h4>
                 {% else%}
                 <ul>
-				{% for candidate in candidates %}
+				{% for post, cand in cands.items() %}
 					<li>
-						{{candidate.post}}&nbsp;&emsp;{{candidate.name}}
+						{{post}}&nbsp;&emsp;{{cand[1]}}
 					</li>
 				{% endfor %}
                 </ul>
+                {%if not status %}
                 <em>Click the button <strong>Vote</strong> to confirm your selected candidate</em>
                 <p><button class='vote'>Vote</button></p>
+                {% else %}
+                <em>You already voted in this elections and can not vote again</em>
+                {% endif %}
                 {% endif %}
             </section>
         </section>

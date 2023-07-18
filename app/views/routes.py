@@ -30,13 +30,17 @@ def login():
         return abort(404, 'user id does not exist')
     if auth.validate(request.form['password'], user.auth_id):
         session['user_id'] = user.id
+        print(user.status, user.name)
         if user.id == 1:
             return redirect(url_for('views.admin'))
         else:
-            if user.status != 'voted':
+            if user.status == 'Not':
                 session['candidates'] = json.dumps({})
-            return redirect(url_for('views.vote', myid=user.id,
-                                    post=get_posts()[0]))
+                return redirect(url_for('views.vote', myid=user.id,
+                                        post=get_posts()[0]))
+            return render_template('choice.html', myid=user.id,
+                                   cands=json.loads(user.status),
+                                   posts=get_posts(), status='voted')
     else:
         return abort(404, 'incorrect password')
 
@@ -63,11 +67,12 @@ def get_posts():
 
 @bp.route('/vote/<int:myid>/<post>')
 def vote(myid, post):
-    """access the ballot page"""
+    """access the ballot page
     voter = storage.show('Voter', int(session['user_id']))
     if voter.status == 'voted':
         # flash('You already voted in this election', 'message')
         return redirect(url_for('views.portal'))
+    """
     return render_template('ballot.html', myid=myid, post=post,
                            positions=get_posts(),
                            candidates=get_candidates(post))
@@ -148,7 +153,8 @@ def clear(obj):
 def tally():
     """add votes to candidates"""
     cands = json.loads(session['candidates'])
-    cands[request.form['post']] = request.form.get('cand_id')
+    cands[request.form['post']] = [request.form.get('cand_id'),
+                                   request.form.get('cand_name')]
     session['candidates'] = json.dumps(cands)
     return 'vote successfully recorded'
 
@@ -157,13 +163,14 @@ def tally():
 def selection(myid):
     """display voter's selected candidates"""
     cands = session.get('candidates')
+    print(cands)
     if cands:
         cands = json.loads(cands)
-        candidates = [v for k, v in get_candidates().items()
-                      if str(k) in cands.values()]
+        # candidates = [v for k, v in get_candidates().items()
+                      # if str(k) in cands.values()]
     else:
-        candidates = {}
-    return render_template('choice.html', myid=myid, candidates=candidates,
+        cands = {}
+    return render_template('choice.html', myid=myid, cands=cands,
                            posts=get_posts())
 
 
@@ -171,8 +178,9 @@ def selection(myid):
 def add_votes():
     """add votes to candidates"""
     for cand in json.loads(session['candidates']).values():
-        storage.show('Candidate', int(cand)).votes += 1
-    storage.show('Voter', int(session['user_id'])).status = 'voted'
+        storage.show('Candidate', int(cand[0])).votes += 1
+    storage.show('Voter',
+                 int(session['user_id'])).status = session['candidates']
     storage.save()
     # flash 'Your vote was successfully recorded'
     return 'Your vote was successfully recorded'

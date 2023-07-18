@@ -15,14 +15,13 @@ linkedin profile: [hawkinswinja](https://linkedin.com/in/hawkinswinja/)
 
 **List of software and dependencies required to run the project.**
 1. python3
-2. sqlalchemy
-3. flask
-4. mysql
-5. mysqlclient (for mysqldb)
+2. pip
+3. install the dependencies listed in requirements.txt
 
 ### Getting Started
 * Clone this repo locally
-* Create a database  named _evoting_
+* Create a database
+* Set the environment variables listed in requirements.txt
 * Run the executable file ./main.py
 
 ## Usage

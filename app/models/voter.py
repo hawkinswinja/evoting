@@ -12,7 +12,7 @@ class Voter(Base):
     __tablename__ = 'voters'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    status = Column(String(15))
+    status = Column(String(100), default='Not')
     name = Column(String(50), nullable=False)
     email = Column(String(50), unique=True, nullable=False)
     auth_id = Column(String(100), nullable=False)

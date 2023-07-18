@@ -22,7 +22,7 @@ and you will no longer be able to make vote changes'
 			   }
 		});
 
-	    window.location = "/e-portal";
+	    window.location.reload;
 	}
   });
 

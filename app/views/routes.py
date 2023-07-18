@@ -48,7 +48,7 @@ def login():
 @bp.route('/logout')
 def logout():
     """removes user id from session"""
-    session.pop('user_id')
+    session.pop('user_id', None)
     return redirect(url_for('views.login'))
 
 
@@ -163,11 +163,8 @@ def tally():
 def selection(myid):
     """display voter's selected candidates"""
     cands = session.get('candidates')
-    print(cands)
     if cands:
         cands = json.loads(cands)
-        # candidates = [v for k, v in get_candidates().items()
-                      # if str(k) in cands.values()]
     else:
         cands = {}
     return render_template('choice.html', myid=myid, cands=cands,

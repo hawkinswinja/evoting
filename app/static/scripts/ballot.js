@@ -16,13 +16,12 @@ and you will no longer be able to make vote changes'
 			//data: formData, 
 			success: function(data) {
 					alert(data);
+					window.location = '/e-portal';
 			   },
 			error: function(xhr, status, error) {
 				alert('Error submitting form ' + error);
 			   }
 		});
-
-	    window.location.reload;
 	}
   });
 

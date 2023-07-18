@@ -31,7 +31,7 @@
 				{% for k, v in candidates.items() %}
 					<li>
 						<label>
-                        	<input type="radio" name='cand_id' value="{{ k }}">
+                        	<input type="radio" name='cand_id' value="{{ k }}" checked required>
                             <input type="hidden" name="cand_name" value="{{v.name}}">
 							<span>{{v.name}}</span>
                     	</label>
@@ -43,10 +43,9 @@
             </form>
         </section>
 		<div>
-			Select Positions at the top left of this webpage to display a navigation link.
-			<br><br>
+			Select Positions at the top left of this webpage to display a navigation link.<br>
 			Clicking on the links will automatically load the election for the selected page
-			<br><br>
+			<br>
 			You can view the results as they stream in by clicking on the E-results
             <p><h4>DO NOT LOGOUT or exit BEFORE SUBMITTING YOUR VOTES as this will remove your choices</h4></p>
             Navigate to 'mychoice' under the Positions tab then click Vote

@@ -30,7 +30,6 @@ def login():
         return abort(404, 'user id does not exist')
     if auth.validate(request.form['password'], user.auth_id):
         session['user_id'] = user.id
-        print(user.status, user.name)
         if user.id == 1:
             return redirect(url_for('views.admin'))
         else:

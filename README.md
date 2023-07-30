@@ -20,9 +20,22 @@ linkedin profile: [hawkinswinja](https://linkedin.com/in/hawkinswinja/)
 
 ### Getting Started
 * Clone this repo locally
+* navigate into app directory
 * Create a database
-* Set the environment variables listed in requirements.txt
-* Run the executable file ./main.py
+* Set the environment variables below
+```bash
+SK = application secret key
+USER = database username
+HOST = database HOST
+PW = database password
+DB = name of database created
+DT = mysql | postgres
+FLASK_APP = app.py
+```
+* Start the app using
+```bash
+flask run -h HOST -p PORT
+```
 
 ## Usage
 

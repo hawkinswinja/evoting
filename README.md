@@ -34,7 +34,7 @@ FLASK_APP = app.py
 ```
 * Start the app using
 ```bash
-flask run -h HOST -p PORT
+flask run -h '127.0.0.1' -p 5000
 ```
 
 ## Usage

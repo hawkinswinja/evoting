@@ -15,13 +15,13 @@ class Engine:
     __session = None
 
     def __init__(self):
-        """initializes the SQL database"""
-        user = getenv('USER')
-        host = getenv('HOST')
-        pw = getenv('PW')
-        db = getenv('DB')
-        dbtype = getenv('DT')
-        url = f'//{user}:{pw}@{host}/{db}'
+        """initializes the database"""
+        user = getenv('USER', 'postgres')
+        host = getenv('HOST', 'localhost')
+        pw = getenv('PW', 'ikura')
+        db = getenv('DB', 'postgres')
+        dbtype = getenv('DT', 'postgres')
+        url = '//{}:{}@{}/{}'.format(user, pw, host, db)
 
         if dbtype == 'mysql':
             self.__engine = create_engine('mysql+mysqldb:' + url)
@@ -60,8 +60,8 @@ class Engine:
                 setattr(obj, k, v)
         try:
             self.__session.add(obj)
-        except SQLAlchemyError:  # NOT WORKING NEEDS updates!!
-            print("Failed to update")
+        except Exception:  # NOT WORKING NEEDS updates!!
+            self.__session.rollback()
 
     def save(self):
         """commit changes to database"""

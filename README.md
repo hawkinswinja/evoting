@@ -39,7 +39,7 @@ flask run -h HOST -p PORT
 
 ## Usage
 
-* Manually add voter data to the database. //the projects assumption is institutions already have this data stored
+* Manually add voter data to the database. _Assumption is institutions already have this data stored_
 * Access the admin page using the link _localhost:5000/admin_
     >> The admin can create and delete election positions for the election.<br> Without any position defined, the election ballot pages are designed to fail. <br>The candidates section allows the administrator to add candidates to the system
 * Access the login access from your browser by typing in _localhost:5000/login_

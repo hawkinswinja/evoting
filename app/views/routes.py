@@ -23,6 +23,7 @@ def admin():
 def login():
     """performs authentication access"""
     if request.method == 'GET':
+        print(request.full_path)
         return render_template('login.html')
     try:
         user = storage.show('Voter', int(request.form['user-id']))

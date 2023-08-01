@@ -8,6 +8,7 @@ from models.voter import (Voter, Base)
 from models.position import Position
 from models.candidate import Candidate
 
+#url = '//ikura:ikura@postgres-container:5432/postgres'
 
 class Engine:
     """alows the perfomance of CRUD operations on the database"""
@@ -16,10 +17,10 @@ class Engine:
 
     def __init__(self):
         """initializes the database"""
-        user = getenv('USER', 'postgres')
+        user = getenv('USER', 'ikura')
         host = getenv('HOST', 'localhost')
         pw = getenv('PW', 'ikura')
-        db = getenv('DB', 'postgres')
+        db = getenv('DB', 'ikura')
         dbtype = getenv('DT', 'postgres')
         url = '//{}:{}@{}/{}'.format(user, pw, host, db)
 

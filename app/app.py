@@ -24,6 +24,6 @@ def require_login():
 @app.after_request
 def after_request(response):
     """Remove cache for e-portal to prevent voting twice"""
-    #response.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
+    # response.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
     response.cache_control.no_store = True
     return response

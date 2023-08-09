@@ -4,7 +4,7 @@
 """
 import json
 from flask import (redirect, url_for, request, jsonify, render_template, abort,
-                   session)
+                   session, flash)
 from models import storage, auth
 from views import bp
 
@@ -23,13 +23,11 @@ def admin():
 def login():
     """performs authentication access"""
     if request.method == 'GET':
-        print(request.full_path)
         return render_template('login.html')
-    try:
-        user = storage.show('Voter', int(request.form['user-id']))
-    except Exception:
-        return abort(404, 'user id does not exist')
-    if auth.validate(request.form['password'], user.auth_id):
+    user = storage.show('Voter', int(request.form['user-id']))
+    if not user:
+        flash("user id does not exist", 'error')
+    elif auth.validate(request.form['password'], user.auth_id):
         session['user_id'] = user.id
         if user.id == 1:
             return redirect(url_for('views.admin'))
@@ -42,7 +40,8 @@ def login():
                                    cands=json.loads(user.status),
                                    posts=get_posts(), status='voted')
     else:
-        return abort(404, 'incorrect password')
+        flash('incorrect password', 'errors')
+    return render_template('login.html')
 
 
 @bp.route('/logout')

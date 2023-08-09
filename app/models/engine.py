@@ -3,12 +3,13 @@
 from os import getenv
 from sqlalchemy.orm import (sessionmaker, scoped_session)
 from sqlalchemy import create_engine
-from sqlalchemy.exc import SQLAlchemyError
+# from sqlalchemy.exc import SQLAlchemyError
 from models.voter import (Voter, Base)
 from models.position import Position
 from models.candidate import Candidate
 
-#url = '//ikura:ikura@postgres-container:5432/postgres'
+# url = '//ikura:ikura@postgres-container:5432/postgres'
+
 
 class Engine:
     """alows the perfomance of CRUD operations on the database"""

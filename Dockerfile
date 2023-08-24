@@ -1,9 +1,9 @@
 FROM python:3.11.4-alpine
 WORKDIR /app
-COPY requirements.txt .
+COPY requirements.txt ./
 RUN pip3 install -r requirements.txt
-RUN adduser -D -g '' postgres
-USER postgres
+RUN adduser -D -g '' ikura
+USER ikura
 ENV HOST=db
 ENV SK=ikurawebapp
 EXPOSE 5000

@@ -1,20 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
         <link rel="stylesheet" href="../static/styles/login.css">
-        <title>eVoting</title>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul style="list-style-type: none;">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
-    </head>
-    <body>
+{% endblock %}
+{% block body %}
         <header></header>
         <section>
             <div class="login">
@@ -29,5 +18,4 @@
                   </form>
             </div>
         </section>
-    </body>
-</html>
+{% endblock %}

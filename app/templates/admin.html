@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
         <link rel="stylesheet" type="text/css" href="../static/styles/admin.css">
         <link rel="stylesheet" type="text/css" href="../static/styles/candidates.css">
-		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script src="{{ url_for('static', filename='scripts/admin.js') }}"></script>
-        <title>eVoting</title>
-    </head>
-    <body>
+{% endblock %}
+{% block body %}
         <header>
             <h1>iKURA</h1>
             <div><h4 id='results'>E-results</h4></div>
@@ -71,4 +68,4 @@
         <button name="clearcands">Clear Candidates</button>
         </section>
     </body>
-</html>
+{% endblock %}

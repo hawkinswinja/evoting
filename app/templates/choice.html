@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="/static/styles/ballot.css">
-		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-		<script src="{{ url_for('static', filename='scripts/ballot.js') }}"></script>
-        <title>eVoting</title>
-    </head>
-    <body>
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="/static/styles/ballot.css">
+	<script src="{{ url_for('static', filename='scripts/ballot.js') }}"></script>
+{% endblock %}
+{% block body%}
         <header class="navigation">
             <div class="posts">
                 <h4>Positions</h4>
@@ -50,5 +47,4 @@
 			<br><br>
 			You can view the results as they stream in by clicking on the E-results
 		</div>
-    </body>
-</html>
+{% endblock %}

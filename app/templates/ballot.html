@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="/static/styles/ballot.css">
-		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-		<script src="{{ url_for('static', filename='scripts/ballot.js') }}"></script>
-        <title>eVoting</title>
-    </head>
-    <body>
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="/static/styles/ballot.css">
+	<script src="{{ url_for('static', filename='scripts/ballot.js') }}"></script>
+{% endblock %}
+{% block body %}
         <header class="navigation">
             <div class="posts">
                 <h4>Positions</h4>
@@ -34,8 +31,6 @@
                         	<input type="radio" name='cand_id' value="{{ k }}" checked required>
                             <input type="hidden" name="cand_name" value="{{v.name}}">
 							<span>{{v.name}}</span>
-                    	</label>
-					</li>
 				{% endfor %}
                 </ul>
                 <em>Click the button <strong>Vote</strong> to confirm your selected candidate</em>
@@ -50,5 +45,4 @@
             <p><h4>DO NOT LOGOUT or exit BEFORE SUBMITTING YOUR VOTES as this will remove your choices</h4></p>
             Navigate to 'mychoice' under the Positions tab then click Vote
 		</div>
-    </body>
-</html>
+{% endblock %}

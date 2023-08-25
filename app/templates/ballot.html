@@ -28,7 +28,7 @@
 				{% for k, v in candidates.items() %}
 					<li>
 						<label>
-                        	<input type="radio" name='cand_id' value="{{ k }}" checked required>
+                        	<input type="radio" name='cand_id' value="{{ k }}">
                             <input type="hidden" name="cand_name" value="{{v.name}}">
 							<span>{{v.name}}</span>
 				{% endfor %}

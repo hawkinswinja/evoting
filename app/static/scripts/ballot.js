@@ -25,13 +25,14 @@ and you will no longer be able to make vote changes'
 		}
 	});
 
+	const post = $('#position').val();
 
 	$('#ballot_form').submit(function (event) {
 		event.preventDefault(); //prevent the form from submitting
 		const formData = $(this).serialize();
 		const id = $('input[type="radio"]:checked').val();
 		const name = $('input[type="radio"]:checked').closest('label').find('span').text();
-
+		
 		if (name) {
 			const confirmation = confirm('Confirm selected candidate\n id:' + id + '\nName: ' + name);
 
@@ -40,7 +41,7 @@ and you will no longer be able to make vote changes'
 					url: $(this).attr('action'),
 					type: $(this).attr('method'),
 					dataType: 'text',
-					data: formData,
+					data: post + " " + String(id) + " " + name,
 					success: function (data) {
 						alert(data);
 					},

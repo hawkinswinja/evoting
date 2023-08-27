@@ -151,9 +151,10 @@ def clear(obj):
 @bp.route('/tally', methods=['POST'])
 def tally():
     """add votes to candidates"""
+    data = request.get_data(as_text=True).split(' ')
+    # print(data)
     cands = json.loads(session['candidates'])
-    cands[request.form['post']] = [request.form.get('cand_id'),
-                                   request.form.get('cand_name')]
+    cands[data[0]] = data[1:]
     session['candidates'] = json.dumps(cands)
     return 'vote successfully recorded'
 
@@ -178,5 +179,5 @@ def add_votes():
     storage.show('Voter',
                  int(session['user_id'])).status = session['candidates']
     storage.save()
-    # flash 'Your vote was successfully recorded'
+    session.pop('user_id', None)
     return 'Your vote was successfully recorded'

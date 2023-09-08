@@ -1,6 +1,7 @@
 version: "3"
 services:
   db:
+    container_name: ikura_db
     image: postgres:15-alpine
     ports:
       - '5432:5432'
@@ -9,7 +10,7 @@ services:
       POSTGRES_DB: 'ikura'
       POSTGRES_PASSWORD: 'ikura'
     volumes:
-      - farm-db:/var/lib/postgresql/data
+      - ikura-db:/var/lib/postgresql/data
 
 volumes:
-  farm-db:
+  ikura-db:

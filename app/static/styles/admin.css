@@ -1,77 +1,215 @@
+/* Reset some default styles */
+body,
+h1,
+h2,
+h3,
+h4,
+ul,
+p {
+    margin: 0;
+    padding: 0;
+}
+
+/* Set a background color and font for the entire page */
 body {
-    margin:0%;
-    display: flex;
-    flex-flow: row wrap;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
 }
+
+/* Style the header section */
 header {
-    width: 100%;
-    height:60px;
-    display:flex;
-    flex-flow: row wrap;
-    text-align: center;
-    background-color:rgb(243, 59, 59);
-    color: white;
-    margin-bottom:30px;
-}
-header h1 {
-    margin: 0 45%;
-}
-h4 {
-    margin: 0%;
-}
-.exit {
-	width: 6%;
-	height: fit-content;
-	background-color: whitesmoke;
-	margin-left: 95%;
-    margin-top: 0px;
-	border-radius: 10px;
-	color: rgb(243, 60, 60);
-}
-.posts {
-    width: fit-content;
-    height: 70vh;
-    border: solid 2px rgb(243, 60, 60);
-    border-radius: 4px;
-    padding: 30px;
+    background-color: #333;
+    color: #fff;
     display: flex;
-    flex-direction:column;
-    margin:auto;
-}
-ul {
-    list-style-type: none;
-    width: 50%;
-    height: 45%;
-    border: solid 1px rgb(243, 60, 60);
-    border-radius: 4px;
-    padding-top: 20px;
-}
-h2 {
-    width: 100%;
-    margin-bottom:0;
-}
-fieldset {
-    width: 60%;
-    height:fit-content;
-    display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    border-color: rgb(243, 60, 60);
-    border-radius: 4px;
+    padding: 10px 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
-button[type="submit"] {
-    background-color: rgb(243, 60, 60);
-    border:solid 1px rgb(243, 59, 59);
-    border-radius: 4px;
-    color: white;
-    margin-top: 10px;
+
+.header-right h1 {
+    font-size: 24px;
+    margin: 0;
 }
-button {
-    background-color: rgb(243, 60, 60);
-    border:solid 1px rgb(243, 59, 59);
-    border-radius: 4px;
-    color: white;
-    margin-top: 10px;
-    width: fit-content;
-    height: fit-content;
+
+.menu-icon {
+    display: none;
+    /* Hide the menu icon by default for desktop view */
+    cursor: pointer;
+    font-size: 24px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    position: relative;
+    /* Add relative positioning */
+}
+
+#results {
+    margin-right: 20px;
+    font-size: 18px;
+}
+
+.exit {
+    background-color: #fff;
+    color: #333;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+/* Style the main content section */
+.posts,
+.candidates {
+    background-color: #fff;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Style the Election Positions list */
+.posts h2,
+.candidates h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.posts ul,
+.candidates ul {
+    list-style-type: none;
+    border: 1px solid #ccc;
+    padding-top: 10px;
+    padding-inline-start: 10px;
+    height: 100px;
+    max-height: 300px;
+    /* Set a maximum height for overflow scrolling */
+    overflow-y: auto;
+    /* Enable vertical scrolling for overflow content */
+}
+
+.posts li,
+.candidates li {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+/* Style the Add New Position and Delete Post forms */
+fieldset {
+    /* border: 1px solid #ccc; */
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+legend {
+    font-weight: bold;
+}
+
+/* Center the input fields */
+input[type="text"],
+input[type="number"] {
+    width: 80%;
+    padding: 5px;
+    margin: 0 auto;
+    /* Center the input fields horizontally */
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+button[type="submit"],
+button[name="clearposts"],
+button[name="clearcands"] {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+/* Style the Filter candidates position field */
+.filter {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#filterpost {
+    width: 60%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+#search {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 3px;
+}
+
+/* Responsive design for mobile view */
+@media screen and (max-width: 768px) {
+    .menu-icon {
+        display: block;
+        /* Show the menu icon for mobile view */
+    }
+
+    .header-left {
+        flex-direction: column;
+        align-items: center;
+        display: none;
+        /* Center items vertically */
+    }
+
+    #results {
+        margin-top: 10px;
+    }
+
+    .exit,
+    button[name="clearposts"],
+    button[name="clearcands"] {
+        margin-top: 10px;
+    }
+
+    /* Pop-up context for mobile view */
+    .menu-icon:hover .header-left {
+        display: block;
+        position: absolute;
+        width: 80%;
+        height: 60px;
+        top: 40px;
+        right: 0;
+        background-color: #333;
+        padding: 10px;
+        border-radius: 5px;
+        z-index: 2;
+    }
+}
+
+@media screen and (min-width: 768px) {
+
+    /* Divide the content into two columns */
+    .posts {
+        width: 35%;
+        /* Half the width for Posts section */
+        float: left;
+        /* Float the Posts section to the left */
+    }
+
+    .candidates {
+        width: 50%;
+        /* Half the width for Candidates section */
+        float: right;
+        /* Float the Candidates section to the left */
+    }
 }

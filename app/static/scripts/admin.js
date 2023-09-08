@@ -6,12 +6,12 @@ $(document).ready(function() {
 	  fetch(url)
 	  .then(response => response.json())
 	  .then(data => {
-		$('#all li').remove();
-		const list = document.getElementById('all');
+		$('#cand_li li').remove();
+		const list = document.getElementById('cand_li');
 		for (const key in data) {
 			let li = document.createElement('li');
 			li.innerHTML = key + '&emsp;' + data[key].name + '&emsp;' + data[key].post;
-			list.appendChild(li);
+			list.append(li);
 		}
 	  })	  
 	  .catch(error => alert(error));

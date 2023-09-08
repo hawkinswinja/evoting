@@ -1,0 +1,15 @@
+version: "3"
+services:
+  db:
+    image: postgres:15-alpine
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: 'ikura'
+      POSTGRES_DB: 'ikura'
+      POSTGRES_PASSWORD: 'ikura'
+    volumes:
+      - farm-db:/var/lib/postgresql/data
+
+volumes:
+  farm-db:

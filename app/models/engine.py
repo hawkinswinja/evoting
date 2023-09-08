@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""this module creates the engine that links to MySQL database"""
+"""this module creates the engine that links to the database"""
 from os import getenv
 from sqlalchemy.orm import (sessionmaker, scoped_session)
 from sqlalchemy import create_engine
@@ -66,7 +66,7 @@ class Engine:
             self.__session.rollback()
 
     def save(self):
-        """commit changes to database"""
+        """commits the changes to database"""
         self.__session.commit()
 
     def delete(self, cls, id=None):
@@ -82,4 +82,5 @@ class Engine:
 
     def show(self, cls, cls_id):
         """returns an object using the primary key"""
+        # risky using eval -> update to use dictionary!!
         return (self.__session.query(eval(cls)).get(cls_id))

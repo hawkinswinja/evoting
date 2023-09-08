@@ -1,0 +1,22 @@
+version: "3"
+services:
+  ikura-app:
+    image: ikura:latest
+    environment:
+      PW: 'ikura'
+    ports:
+      - '5000:5000'
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: 'ikura'
+      POSTGRES_DB: 'ikura'
+      POSTGRES_PASSWORD: 'ikura'
+    volumes:
+      - ikura-db:/var/lib/postgresql/data
+
+volumes:
+  ikura-db:

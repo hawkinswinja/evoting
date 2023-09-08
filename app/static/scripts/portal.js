@@ -5,11 +5,12 @@ $(document).ready(function() {
 	  fetch(url)
 	  .then(response => response.json())
 	  .then(data => {
-		$('#candidates li').remove();
+		$('#candidates li').empty();
 		const list = document.getElementById('candidates');
-		for (const key in data) {
-			let li = document.createElement('li');
-			li.innerText = data[key].name + '  ' + data[key].post + ' ' + data[key].votes;
+		// list.html("<h3>Name&emsp;Position&ensp;Votes</h3>")
+		for (const cand of Object.values(data)) {
+			const li = document.createElement('li');
+			li.innerHTML = cand.name + '&emsp;' + cand.post + '&emsp;' + cand.votes;
 			list.appendChild(li);
 		}
 	  })	  

@@ -10,7 +10,7 @@ $(document).ready(function() {
 		const list = document.getElementById('all');
 		for (const key in data) {
 			let li = document.createElement('li');
-			li.innerText = key + '  ' + data[key].name + '  ' + data[key].post;
+			li.innerHTML = key + '&emsp;' + data[key].name + '&emsp;' + data[key].post;
 			list.appendChild(li);
 		}
 	  })	  

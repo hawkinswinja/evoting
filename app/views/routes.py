@@ -3,7 +3,7 @@
    defines all the endpoint routes
 """
 import json
-from flask import (redirect, url_for, request, jsonify, render_template, abort,
+from flask import (redirect, url_for, request, render_template,
                    session, flash)
 from models import storage, auth
 from views import bp
@@ -66,11 +66,9 @@ def get_posts():
 
 @bp.route('/vote/<int:myid>/<post>')
 def vote(myid, post):
-    """access the ballot page
-    voter = storage.show('Voter', int(session['user_id']))
-    if voter.status == 'voted':
-        # flash('You already voted in this election', 'message')
-        return redirect(url_for('views.portal'))
+    """Voters select their canidate for the post position
+          myid: voter id parameter passed after authentication
+          post: the election position. used to fetch candidates
     """
     return render_template('ballot.html', myid=myid, post=post,
                            positions=get_posts(),
@@ -80,7 +78,7 @@ def vote(myid, post):
 @bp.route('/candidates')
 @bp.route('/candidates/<string:position>')
 def get_candidates(position=None):
-    """return dictionary of lists of candidates"""
+    """returns dictionary of lists of candidates"""
     post_candidates = {}
     if position:
         try:
@@ -91,7 +89,7 @@ def get_candidates(position=None):
                                                   'votes': user.votes
                                                   }
         except Exception:
-            return abort(404, 'This position does not exist')
+            flash('This position does not exist')
     else:
         cands = storage.all('Candidate')
         for user in cands:
@@ -104,19 +102,22 @@ def get_candidates(position=None):
 
 @bp.route('/add', methods=['POST'])
 def add():
-    """handle form events"""
+    """Add newly created positions or register new candidates"""
     if request.form.get('form_id') == 'position':
         post = request.form.get('Position')
         if post in get_posts():
-            return jsonify("Position cannot be null or similar.\n\
-                           Ensure the position does not already exist")
+            flash("Position already exists")
         else:
             storage.new('Position', {'post': request.form.get('Position')})
     if request.form.get('form_id') == 'candidate':
-        cand = request.form.get('voter_id')
-        candlist = get_candidates().keys()
-        if cand in candlist:
-            return jsonify("Candidate already registered")
+        cand = int(request.form.get('voter_id'))
+        post = request.form.get('post_id')
+        candlist = get_candidates()
+        if candlist.get(cand):
+            flash("This voter registered for position {}"
+                  .format(candlist[cand]['post']), 'error')
+        elif post not in get_posts():
+            flash("This post does not exist")
         else:
             storage.new('Candidate',
                         {'voter_id': cand,
@@ -132,14 +133,17 @@ def delete():
     val = request.form.get('post_id')
     try:
         storage.delete('Position', val)
+        storage.save()
     except Exception:
-        return jsonify("This position does not exist")
-    storage.save()
+        flash("This position does not exist", 'error')
     return redirect(url_for('views.admin'))
 
 
 @bp.route('/clear/<obj>')
 def clear(obj):
+    """Remove all instances of the specified class
+       obj: Class name
+    """
     if obj == 'posts':
         storage.delete('Position')
     else:
@@ -150,9 +154,8 @@ def clear(obj):
 
 @bp.route('/tally', methods=['POST'])
 def tally():
-    """add votes to candidates"""
+    """adds votes to candidates and update voter status"""
     data = request.get_data(as_text=True).split(' ')
-    # print(data)
     cands = json.loads(session['candidates'])
     cands[data[0]] = data[1:]
     session['candidates'] = json.dumps(cands)
@@ -179,5 +182,5 @@ def add_votes():
     storage.show('Voter',
                  int(session['user_id'])).status = session['candidates']
     storage.save()
-    session.pop('user_id', None)
-    return 'Your vote was successfully recorded'
+    # session.pop('user_id', None)
+    return ('Your vote was successfully recorded')

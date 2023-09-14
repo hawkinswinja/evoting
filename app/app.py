@@ -15,8 +15,9 @@ app.register_blueprint(bp)
 
 @app.before_request
 def require_login():
-    """performed before any request is made to the server"""
-    if 'login' not in request.path and 'user_id' not in session:
+    """Ensure only authenticated users access the site"""
+    path = request.path
+    if 'login' not in path and not session.get('user_id'):
         return redirect(url_for('views.login'))
 
 
@@ -24,4 +25,6 @@ def require_login():
 def after_request(response):
     """Remove cache for e-portal to prevent voting twice"""
     response.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
+    # if 'e-portal' in request.path:
+    #     session.pop('user_id', None)
     return response

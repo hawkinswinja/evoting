@@ -16,7 +16,7 @@ and you will no longer be able to make vote changes'
 				//data: formData, 
 				success: function (data) {
 					alert(data);
-					window.location = '/e-portal';
+					window.location = '/logout';
 				},
 				error: function (xhr, status, error) {
 					alert('Error submitting form ' + error);

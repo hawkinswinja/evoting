@@ -6,6 +6,7 @@
 {% endblock %}
 {% block body%}
         <header class="navigation">
+            {% if not status %}
             <div class="posts">
                 <h4>Positions</h4>
                 <ul class="popover">
@@ -14,6 +15,7 @@
 				{% endfor %}
                 </ul>
             </div>
+            {% endif%}
             <div><h4 id='results'>E-results</h4></div>
             <button class='exit'>Exit</button>
         </header>

@@ -8,6 +8,9 @@ from flask import (redirect, url_for, request, render_template,
 from models import storage, auth
 from views import bp
 
+@bp.route('/test')
+def test():
+   return 'success', 200
 
 @bp.route('/admin')
 def admin():

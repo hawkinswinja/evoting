@@ -2,14 +2,15 @@ version: "3"
 services:
   ikura-app:
     container_name: ikura_app
-    image: ikura:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       PW: 'ikura'
     ports:
       - '5000:5000'
     depends_on:
       - db
-
   db:
     container_name: ikura_db
     image: postgres:15-alpine
@@ -19,6 +20,5 @@ services:
       POSTGRES_PASSWORD: 'ikura'
     volumes:
       - ikura-db:/var/lib/postgresql/data
-
 volumes:
   ikura-db:

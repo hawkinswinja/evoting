@@ -16,8 +16,8 @@ jobs:
     - name: Start Docker Compose
       run: docker-compose up -d
       
-    - name: check server status
-      run: docker-compose logs ikura_app
+    - name: Check logs for server running
+      run: docker-compose logs ikura-app
       
     - name: Run Tests
       id: test

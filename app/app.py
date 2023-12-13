@@ -17,9 +17,10 @@ app.register_blueprint(bp)
 def require_login():
     """Ensure only authenticated users access the site"""
     path = request.path
-    if 'login' not in path and not session.get('user_id'):
-        return redirect(url_for('views.login'))
+    excluded_endpoints = ['login', 'test']
 
+    if not any(endpoint in path for endpoint in excluded_endpoints) or not session.get('user_id'):
+        return redirect(url_for('views.login'))
 
 @app.after_request
 def after_request(response):

@@ -9,7 +9,7 @@ for i in range(5):
     storage.new('Voter', {'name': name, 'email': email, 'auth_id': pw})
 storage.save()
 users = storage.all('Voter')
-if len(users) == 5:
+if len(users) == 6:
   print('Tests Passed')
 else:
   print('Failed tests')

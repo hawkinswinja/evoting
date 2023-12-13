@@ -19,7 +19,7 @@ jobs:
     - name: Run Tests
       id: test
       run: |
-        result=$(docker exec -it ikura_app python3 app_test.py)
+        result=$(docker exec ikura_app python3 app_test.py)
         echo "::set-output name=result::$result"
 
     - name: Check test results

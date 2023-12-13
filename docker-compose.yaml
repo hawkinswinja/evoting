@@ -11,12 +11,18 @@ services:
     ports:
       - '5000:5000'
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   db:
     container_name: ikura_db
     image: postgres:15-alpine
     expose:
     - 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ikura"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     environment:
       POSTGRES_USER: 'ikura'
       POSTGRES_DB: 'ikura'

@@ -1,13 +1,13 @@
-SHA ?=
+IMAGE_TAG ?=
 USER ?=
 PASSWORD ?=
 
 .PHONY: get_sha
 get_sha:
-	@echo $(SHA)
+	@echo $(SIMAGE_TAG)
 
 build:
-	@docker build -t hawkinswinja/ikura:$(SHA) .
+	@docker build -t hawkinswinja/ikura:$(IMAGE_TAG) .
 	@echo 'check image tag'
 	@docker images | grep ikura
 .PHONY: build
@@ -18,5 +18,5 @@ tests: build
 
 push: tests
 	@docker login --username $(USER) --password $(PASSWORD)
-	@docker push hawkinswinja/ikura:$(SHA)
+	@docker push hawkinswinja/ikura:$(IMAGE_TAG)
 .PHONY: push

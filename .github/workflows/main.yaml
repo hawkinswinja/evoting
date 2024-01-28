@@ -19,17 +19,12 @@ jobs:
         tag=$(git rev-parse --short ${{ github.sha }})
         echo "IMAGE_TAG=$tag" >> $GITHUB_ENV
         echo 'Your image tag: '
-        echo ${{ env.IMAGE_TAG }}
+
     - name: Confirm git commit SHA output
-      run: echo ${{ env.IMAGE_TAG }}
+      run: make get_sha
 
     # - name: Build docker image
-    #  run:
-    #    make build     
-  
-  Test:
-    needs: Build
-    runs-on: ubuntu-latest
-    steps:
-    - name: check tag
-      run: echo ${{ env.IMAGE_TAG }}
+    #   run: SHA=${{ env.IMAGE_TAG }} make build
+      
+    # - name: Push image
+    #   run: 

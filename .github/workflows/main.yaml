@@ -1,0 +1,32 @@
+name: build and push docker images
+on:
+   workflow_dispatch:
+   push:
+     branches:
+     - master
+     paths:
+     - 'app/**'
+     - 'Dockerfile'
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout code
+      uses: actions/checkout@v4
+
+    - name: set image tag
+      run: |
+        tag=$(git rev-parse --short ${{ github.sha }})
+        echo "SHA=$tag" >> $GITHUB_ENV
+        echo ${{ env.SHA }}
+
+    # - name: Build docker image
+    #  run:
+    #    make build     
+  
+  Test:
+    depends_on: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: check tag
+      run: echo ${{ env.SHA }}

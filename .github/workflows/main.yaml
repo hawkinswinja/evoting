@@ -3,7 +3,7 @@ on:
    workflow_dispatch:
    push:
      branches:
-     - master
+     - main
      paths:
      - 'app/**'
      - 'Dockerfile'
@@ -18,13 +18,16 @@ jobs:
       run: |
         tag=$(git rev-parse --short ${{ github.sha }})
         echo "IMAGE_TAG=$tag" >> $GITHUB_ENV
-        echo 'Your image tag: '
+        make get_sha
 
-    - name: Confirm git commit SHA output
-      run: make get_sha
+    # - name: Confirm git commit SHA output
+    #   run: make get_sha
 
-    # - name: Build docker image
-    #   run: SHA=${{ env.IMAGE_TAG }} make build
+    - name: Build docker image
+      run: make build
       
-    # - name: Push image
-    #   run: 
+    - name: Push image
+      run: make push
+      env:
+        USER: ${{ secrets.docker-user }}
+        PASSWORD: ${{ secrets.docker-passwd }}

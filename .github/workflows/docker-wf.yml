@@ -1,10 +1,15 @@
-name: Docker Image CI
+name: Docker Compose CI
 
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'app/**'
+      - 'Dockerfile'
   pull_request:
-    branches: [ "main" ]
+    paths:
+      - 'app/**'
+      - 'Dockerfile'
 
 jobs:
   test_services:
@@ -23,7 +28,7 @@ jobs:
       id: test
       run: |
         result=$(docker exec ikura_app python3 app_test.py)
-        echo "::set-output name=result::$result"
+        echo "result=$result" >> $GITHUB_OUTPUT
 
     - name: Check test results
       run: |

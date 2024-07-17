@@ -5,8 +5,8 @@
 import json
 from flask import (redirect, url_for, request, render_template,
                    session, flash)
-from models import storage, auth
-from views import bp
+from app.util import validate, storage
+from . import bp
 
 @bp.route('/test')
 def test():
@@ -30,16 +30,16 @@ def login():
     user = storage.show('Voter', int(request.form['user-id']))
     if not user:
         flash("user id does not exist", 'error')
-    elif auth.validate(request.form['password'], user.auth_id):
-        session['user_id'] = user.id
-        if user.id == 1:
-            return redirect(url_for('views.admin'))
+    elif validate(request.form['password'], user.auth_id):
+        session['user_id'] = user.voter_id
+        if user.is_admin:
+            return redirect(url_for('routes.admin'))
         else:
             if user.status == 'Not':
                 session['candidates'] = json.dumps({})
-                return redirect(url_for('views.vote', myid=user.id,
+                return redirect(url_for('routes.vote', myid=user.voter_id,
                                         post=get_posts()[0]))
-            return render_template('choice.html', myid=user.id,
+            return render_template('choice.html', myid=user.voter_id,
                                    cands=json.loads(user.status),
                                    posts=get_posts(), status='voted')
     else:
@@ -51,7 +51,7 @@ def login():
 def logout():
     """removes user id from session"""
     session.pop('user_id', None)
-    return redirect(url_for('views.login'))
+    return redirect(url_for('routes.login'))
 
 
 @bp.route('/e-portal')
@@ -127,7 +127,7 @@ def add():
                          'post_id': request.form.get('post_id')
                          })
     storage.save()
-    return redirect(url_for('views.admin'))
+    return redirect(url_for('routes.admin'))
 
 
 @bp.route('/delete', methods=['POST'])
@@ -139,7 +139,7 @@ def delete():
         storage.save()
     except Exception:
         flash("This position does not exist", 'error')
-    return redirect(url_for('views.admin'))
+    return redirect(url_for('routes.admin'))
 
 
 @bp.route('/clear/<obj>')
@@ -152,7 +152,7 @@ def clear(obj):
     else:
         storage.delete('Candidate')
     storage.save()
-    return redirect(url_for('views.admin'))
+    return redirect(url_for('routes.admin'))
 
 
 @bp.route('/tally', methods=['POST'])

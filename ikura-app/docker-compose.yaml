@@ -1,4 +1,4 @@
-version: "3"
+# version: "3"
 services:
   ikura-app:
     container_name: ikura_app
@@ -6,8 +6,12 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      PW: 'ikura'
-      HOST: 'db'
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      SECRET_KEY: ${SECRET_KEY}
     ports:
       - '5000:5000'
     depends_on:
@@ -24,9 +28,9 @@ services:
       timeout: 5s
       retries: 5
     environment:
-      POSTGRES_USER: 'ikura'
-      POSTGRES_DB: 'ikura'
-      POSTGRES_PASSWORD: 'ikura'
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ikura-db:/var/lib/postgresql/data
 volumes:

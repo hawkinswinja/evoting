@@ -1,0 +1,8 @@
+.dockerignore
+Dockerfile
+docker-compose.yaml
+Makefile
+__pycache__
+app/__pycache__
+app/*/__pycache__
+logs

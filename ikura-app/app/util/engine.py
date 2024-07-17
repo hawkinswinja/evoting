@@ -3,12 +3,9 @@
 from os import getenv
 from sqlalchemy.orm import (sessionmaker, scoped_session)
 from sqlalchemy import create_engine
-# from sqlalchemy.exc import SQLAlchemyError
-from models.voter import (Voter, Base)
-from models.position import Position
-from models.candidate import Candidate
+from app.models import (Base, Candidate, Position, Voter)
 
-# url = '//ikura:ikura@postgres-container:5432/postgres'
+# url = 'engine//ikura:ikura@postgres-container:5432/postgres'
 
 
 class Engine:
@@ -18,24 +15,25 @@ class Engine:
 
     def __init__(self):
         """initializes the database"""
-        user = getenv('USER', 'ikura')
-        host = getenv('HOST', 'localhost')
-        pw = getenv('PW', 'ikura')
-        db = getenv('DB', 'ikura')
-        dbtype = getenv('DT', 'postgres')
-        url = '//{}:{}@{}/{}'.format(user, pw, host, db)
+        user = getenv('POSTGRES_USER', 'ikura')
+        host = getenv('POSTGRES_HOST', 'localhost')
+        port = getenv('POSTGRES_PORT', '5432')
+        pw = getenv('POSTGRES_PASSWORD', 'ikura')
+        db = getenv('POSTGRES_DB', 'ikura')
+        url = '//{}:{}@{}:{}/{}'.format(user, pw, host, port, db)
 
-        if dbtype == 'mysql':
-            self.__engine = create_engine('mysql+mysqldb:' + url)
-        else:
-            self.__engine = create_engine('postgresql+psycopg2:' + url)
+        # if dbtype == 'mysql':
+        #     port = getenv('DB_PORT', '3306')
+        #     self.__engine = create_engine('mysql+mysqldb:' + url)
+        # else:
+        self.__engine = create_engine('postgresql+psycopg2:' + url)
 
         # map all subclasses of Base to create the database
         Base.metadata.create_all(self.__engine)
 
     def destroy(self):
         """Destroy the current db and all its contents"""
-        Base.metadata.destroy_all()
+        Base.metadata.drop_all(bind=self.__engine)
 
     def reload(self):
         """reloads all created contents of the database"""
@@ -83,4 +81,5 @@ class Engine:
     def show(self, cls, cls_id):
         """returns an object using the primary key"""
         # risky using eval -> update to use dictionary!!
-        return (self.__session.query(eval(cls)).get(cls_id))
+        # print(type(cls_id))
+        return self.__session.get(eval(cls), cls_id)

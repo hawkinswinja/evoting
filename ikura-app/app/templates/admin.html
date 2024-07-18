@@ -2,7 +2,6 @@
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" type="text/css" href="../static/styles/admin.css">
-<!-- <link rel="stylesheet" type="text/css" href="../static/styles/candidates.css"> -->
 <script src="{{ url_for('static', filename='scripts/admin.js') }}"></script>
 {% endblock %}
 {% block body %}
@@ -16,60 +15,65 @@
         <button class="exit">Exit</button>
     </div>
 </header>
-<section class="posts">
-    <h2>Election Positions</h2>
-    <ul>
-        {% for position in positions %}
-        <li>{{ position }}</li>
-        {% endfor %}
-    </ul>
-    <fieldset>
-        <legend>Add New Position</legend>
-        <form action="/add" method="POST">
-            <input type="hidden" name="form_id" value="position">
-            <input type="text" name="Position" placeholder="Position Name">
-            <br>
-            <button type="submit">Add position</button>
-        </form>
-    </fieldset>
-    <br>
-    <fieldset>
-        <legend>Delete Post</legend>
-        <form action="/delete" method="POST">
-            <input type="text" name="post_id" placeholder="Enter position to delete">
-            <br>
-            <button type="submit">Delete</button>
-        </form>
-    </fieldset>
-    <button name="clearposts">Clear Posts</button>
-</section>
-<section class="candidates">
-    <h2>Candidates</h2>
-    <fieldset class="filter">
-        <legend>Filter candidates position</legend>
-        <input type="text" id="filterpost">
-        <button id="search">Search</button>
-    </fieldset>
-    <h3>ID&ensp;Name&ensp;Position</h3>
-    <ul id="cand_li">
-        {% for k, v in candidates.items() %}
-        <li>{{k}}&ensp;{{v.name}}&emsp;{{v.post}}</li>
-        {% endfor %}
-    </ul>
-    <fieldset class="add">
-        <legend>Add Candidate</legend>
-        <form action="/add" method="POST">
-            <input type="hidden" name="form_id" value="candidate">
-            <label for="voter_id">Voter ID: </label>
-            <input type="number" id="voter_id" name="voter_id">
-            <br>
-            <br>
-            <label for="post_id">Position: </label>
-            <input type="text" name="post_id" id="post_id">
-            <br>
-            <button type="submit">Add</button>
-        </form>
-    </fieldset>
-    <button name="clearcands" type="button">Clear Candidates</button>
-</section>
+<main>
+    <section class="posts">
+        <h2>Election Positions</h2>
+        <div class="form-container">
+            <fieldset>
+                <legend>Add New Position</legend>
+                <form action="/add" method="POST">
+                    <input type="hidden" name="form_id" value="position">
+                    <input type="text" name="Position" placeholder="Position Name">
+                    <br>
+                    <button type="submit">Add position</button>
+                </form>
+            </fieldset>
+            <fieldset>
+                <legend>Delete Post</legend>
+                <form action="/delete" method="POST">
+                    <input type="text" name="post_id" placeholder="Enter position to delete">
+                    <br>
+                    <button type="submit">Delete</button>
+                </form>
+            </fieldset>
+        </div>
+        <ul>
+            {% for position in positions %}
+            <li>{{ position }}</li>
+            {% endfor %}
+        </ul>
+        <button name="clearposts">Clear Posts</button>
+    </section>
+    <section class="candidates">
+        <h2>Candidates</h2>
+        <div class="form-container">
+            <fieldset class="add">
+                <legend>Add Candidate</legend>
+                <form action="/add" method="POST">
+                    <input type="hidden" name="form_id" value="candidate">
+                    <label for="voter_id">Voter ID: </label>
+                    <input type="number" id="voter_id" name="voter_id">
+                    <br>
+                    <br>
+                    <label for="post_id">Position: </label>
+                    <input type="text" name="post_id" id="post_id">
+                    <br>
+                    <button type="submit">Add</button>
+                </form>
+            </fieldset>
+        </div>
+        <fieldset class="filter">
+            <legend>Filter candidates position</legend>
+            <input type="text" id="filterpost">
+            <button id="search">Search</button>
+        </fieldset>
+        <ul id="cand_li">
+            <li> <h3>ID&ensp;Name&ensp;Position</h3></li>
+            {% for k, v in candidates.items() %}
+            <li>{{k}}&ensp;{{v.name}}&emsp;{{v.post}}</li>
+            {% endfor %}
+        </ul>
+        <button name="clearcands" type="button">Clear Candidates</button>
+    </section>
+</main>
 {% endblock %}

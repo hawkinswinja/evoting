@@ -4,8 +4,11 @@
     {% block head %}
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <title>eVoting</title>
+    <title>{% block title %}eVoting{% endblock %}</title>
     {% endblock %}
+    
+</head>
+<body>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
         <ul style="list-style-type: none;">
@@ -15,8 +18,6 @@
         </ul>
     {% endif %}
     {% endwith %}
-</head>
-<body>
     {% block body %}
     {% endblock %}
 </body>

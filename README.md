@@ -1,5 +1,5 @@
 # iKURA online voting system
-<img src="src/images/ballot.png" alt="iKURA" width="400" height="300">
+<img src="docs/images/ballot.png" alt="iKURA" width="400" height="300">
 
 ## Introduction
 

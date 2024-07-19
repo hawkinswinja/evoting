@@ -1,5 +1,5 @@
 # iKURA online voting system
-<img src="/images/ballot.png" alt="iKURA" width="400" height="300">
+<img src="src/images/ballot.png" alt="iKURA" width="400" height="300">
 
 ## Introduction
 
@@ -16,32 +16,32 @@ linkedin profile: [hawkinswinja](https://linkedin.com/in/hawkinswinja/)
 **List of software and dependencies required to run the project.**
 1. python3
 2. pip
-3. install the dependencies listed in requirements.txt
+3. postgresql
 
 ### Getting Started
 * Clone this repo locally
-* navigate into app directory
+* Navigate into ikura-app directory
+* Activate virtual environment (venv) and install the dependencies listed in requirements.txt
 * Create a database
 * Set the environment variables below
 ```bash
-SK = application secret key
-USER = database username
-HOST = database HOST
-PW = database password
-DB = name of database created
-DT = mysql | postgres
-FLASK_APP = app.py
+SECRET_KEY = application secret key
+POSTGRES_USER = database username
+POSTGRES_HOST = database HOST
+POSTGRES_PASSWORD = database password
+POSTGRES_DB = name of database created
 ```
 * Start the app using
 ```bash
-flask run -h '127.0.0.1' -p 5000
+python run.py
 ```
 
 ## Usage
 
 * Manually add voter data to the database. _Assumption is institutions already have this data stored_
-* Access the admin page using the link _localhost:5000/admin_
+* Login as the administrator and setup the electorate positions and candidates
     >> The admin can create and delete election positions for the election.<br> Without any position defined, the election ballot pages are designed to fail. <br>The candidates section allows the administrator to add candidates to the system
+
 * Access the login access from your browser by typing in _localhost:5000/login_
     >> Students select their candidate by name and click the Vote button to confirm and post results. <br>
     >> The positions navigation allows voters to switch through different election positions ensuring they can vote only for the positions they want to<br>
@@ -49,7 +49,7 @@ flask run -h '127.0.0.1' -p 5000
 
 ## Contributing
 
-Contributions to this project are highly appreciated in making the system much efficient in real time updates.
+Contributions to this project are highly appreciated in making the system much efficient in real time updates and UI.
 Create a new pull request and I will gladly make the updates to the system
 
 ## Related projects

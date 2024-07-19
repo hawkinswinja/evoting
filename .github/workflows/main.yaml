@@ -1,6 +1,16 @@
 name: Build and Push Docker Image
 
+name: Build and Push Docker Image
+
 on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
   push:
     branches:
       - main
@@ -11,7 +21,9 @@ on:
 
 jobs:
   build-and-push:
+  build-and-push:
     runs-on: ubuntu-latest
+
 
     steps:
       - name: Checkout code

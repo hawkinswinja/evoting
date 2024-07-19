@@ -1,4 +1,4 @@
-# version: "3"
+name: ikura
 services:
   ikura-app:
     container_name: ikura_app
@@ -13,13 +13,13 @@ services:
       POSTGRES_PORT: ${POSTGRES_PORT}
       SECRET_KEY: ${SECRET_KEY}
     ports:
-      - '5000:5000'
+      - '8000:8000'
     depends_on:
       db:
         condition: service_healthy
   db:
     container_name: ikura_db
-    image: postgres:15-alpine
+    image: postgres:alpine3.19
     expose:
     - 5432
     healthcheck:

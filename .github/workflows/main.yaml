@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'ikura-app/**'
   pull_request:
-    branches:
-      - main
+    paths:
+      - 'ikura-app/**'
   workflow_dispatch:
 
 jobs:

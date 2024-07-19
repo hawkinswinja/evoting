@@ -1,7 +1,5 @@
 name: Build and Push Docker Image
 
-name: Build and Push Docker Image
-
 on:
   push:
     branches:
@@ -11,16 +9,7 @@ on:
       - main
   workflow_dispatch:
 
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
-
 jobs:
-  build-and-push:
   build-and-push:
     runs-on: ubuntu-latest
 
@@ -32,7 +21,7 @@ jobs:
       - name: Lint Dockerfile
         uses: hadolint/hadolint-action@v1.5.0
         with:
-          dockerfile: ./Dockerfile
+          dockerfile: ./ikura-app/Dockerfile
   
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1

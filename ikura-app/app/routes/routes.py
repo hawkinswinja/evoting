@@ -15,7 +15,9 @@ def test():
 @bp.route('/admin')
 def admin():
     """access the admin page"""
-    positions = get_posts()
+    if session['role'] != 'admin':
+        return redirect(url_for('routes.login'))
+    positions = get_election_posts()
     candidates = get_candidates()
 
     return render_template('admin.html', positions=positions,
@@ -24,118 +26,132 @@ def admin():
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    """performs authentication access"""
+    """Performs user authentication"""
     if request.method == 'GET':
         return render_template('login.html')
-    user = storage.show('Voter', int(request.form['user-id']))
+    
+    # Get user credentials
+    user_id = request.form['user-id']
+    password = request.form['password']
+    user = storage.show('Voter', int(user_id))
     if not user:
-        flash("user id does not exist", 'error')
-    elif validate(request.form['password'], user.auth_id):
+        flash("User ID does not exist", 'error')
+    elif validate(password, user.auth_id):
         session['user_id'] = user.voter_id
-        if user.is_admin:
-            return redirect(url_for('routes.admin'))
-        else:
-            if user.status == 'Not':
-                session['candidates'] = json.dumps({})
-                return redirect(url_for('routes.vote', myid=user.voter_id,
-                                        post=get_posts()[0]))
-            return render_template('choice.html', myid=user.voter_id,
-                                   cands=json.loads(user.status),
-                                   posts=get_posts(), status='voted')
+        session['role'] = 'admin' if user.is_admin else 'voter'
+        return handle_user_redirect(user)
     else:
-        flash('incorrect password', 'errors')
+        flash('Incorrect password', 'error')
     return render_template('login.html')
+
+def handle_user_redirect(user):
+    """Redirects user based on role"""
+    if user.is_admin:
+        return redirect(url_for('routes.admin'))
+    else:
+        return handle_voter_redirect(user)
+
+def handle_voter_redirect(user):
+    """Redirects voter based on their voting status"""
+    if user.status == 'Not':
+        session['candidates'] = json.dumps({})
+        first_post = get_election_posts()[0]
+        return redirect(url_for('routes.vote', myid=user.voter_id, post=first_post))
+    return render_template('choice.html', myid=user.voter_id, cands=json.loads(user.status), posts=get_election_posts(), status='voted')
 
 
 @bp.route('/logout')
 def logout():
-    """removes user id from session"""
+    """Removes user ID from session and logs out"""
     session.pop('user_id', None)
     return redirect(url_for('routes.login'))
 
 
 @bp.route('/e-portal')
 def portal():
-    """returns the webpage displaying the results"""
+    """Returns the webpage displaying the results"""
     return render_template('portal.html', candidates=get_candidates())
 
 
 @bp.route('/posts')
-def get_posts():
-    """return a list of election posts"""
-    election_posts = [post.post for post in (storage.all('Position'))]
-    return election_posts
+def get_election_posts():
+    """Return a list of election position"""
+    return [post.post for post in (storage.all('Position'))]
 
 
 @bp.route('/vote/<int:myid>/<post>')
 def vote(myid, post):
-    """Voters select their canidate for the post position
+    """Voters select their candidate for the post position
           myid: voter id parameter passed after authentication
           post: the election position. used to fetch candidates
     """
     return render_template('ballot.html', myid=myid, post=post,
-                           positions=get_posts(),
+                           positions=get_election_posts(),
                            candidates=get_candidates(post))
 
 
 @bp.route('/candidates')
 @bp.route('/candidates/<string:position>')
 def get_candidates(position=None):
-    """returns dictionary of lists of candidates"""
-    post_candidates = {}
-    if position:
+    """Returns dictionary of lists of candidates, optional filter by position"""
+    candidates = {}
+    if position: # filter by position
         try:
             post = storage.show('Position', position)
             for user in post.positions:
-                post_candidates[user.voter_id] = {'name': user.details.name,
-                                                  'post': user.post_id,
-                                                  'votes': user.votes
-                                                  }
+                candidates[user.voter_id] = {
+                    'name': user.details.name,
+                    'post': user.post_id,
+                    'votes': user.votes
+                }
         except Exception:
             flash('This position does not exist')
     else:
-        cands = storage.all('Candidate')
-        for user in cands:
-            post_candidates[user.voter_id] = {'name': user.details.name,
-                                              'post': user.post_id,
-                                              'votes': user.votes
-                                              }
-    return post_candidates
+        for user in storage.all('Candidate'):
+            candidates[user.voter_id] = {
+                'name': user.details.name,
+                'post': user.post_id,
+                'votes': user.votes
+            }
+    return candidates
 
 
 @bp.route('/add', methods=['POST'])
 def add():
     """Add newly created positions or register new candidates"""
-    if request.form.get('form_id') == 'position':
-        post = request.form.get('Position')
-        if post in get_posts():
+    election_positions = get_election_posts()
+    form = request.form
+    form_id = form.get('form_id')
+    if form_id == 'position': # add position
+        post = form.get('Position')
+        if post in election_positions:
             flash("Position already exists")
         else:
-            storage.new('Position', {'post': request.form.get('Position')})
-    if request.form.get('form_id') == 'candidate':
-        cand = int(request.form.get('voter_id'))
-        post = request.form.get('post_id')
-        candlist = get_candidates()
-        if candlist.get(cand):
-            flash("This voter registered for position {}"
-                  .format(candlist[cand]['post']), 'error')
-        elif post not in get_posts():
+            storage.new('Position', {'post': post})
+            storage.save()
+    else: # add candidate
+        candidate_id = int(form.get('voter_id'))
+        post = form.get('post_id')
+        candidates = get_candidates()
+        if candidates.get(candidate_id):
+            flash("This voter is already a candidate for {}".format(candidates[candidate_id]['post']), 'error')
+        elif post not in election_positions:
             flash("This post does not exist")
         else:
             storage.new('Candidate',
-                        {'voter_id': cand,
-                         'post_id': request.form.get('post_id')
+                        {'voter_id': candidate_id,
+                         'post_id': post
                          })
-    storage.save()
+            storage.save()
     return redirect(url_for('routes.admin'))
 
 
 @bp.route('/delete', methods=['POST'])
-def delete():
-    """delete items from database"""
-    val = request.form.get('post_id')
+def delete_position():
+    """Delete election position"""
+    post_id = request.form.get('post_id')
     try:
-        storage.delete('Position', val)
+        storage.delete('Position', post_id)
         storage.save()
     except Exception:
         flash("This position does not exist", 'error')
@@ -157,31 +173,30 @@ def clear(obj):
 
 @bp.route('/tally', methods=['POST'])
 def tally():
-    """adds votes to candidates and update voter status"""
+    """Record voter selection for election positions and save in session data"""
     data = request.get_data(as_text=True).split(' ')
-    cands = json.loads(session['candidates'])
-    cands[data[0]] = data[1:]
-    session['candidates'] = json.dumps(cands)
-    return 'vote successfully recorded'
+    candidates = json.loads(session['candidates'])
+    candidates[data[0]] = data[1:]
+    session['candidates'] = json.dumps(candidates)
+    return 'Vote successfully recorded'
 
 
 @bp.route('/<int:myid>/selection')
 def selection(myid):
-    """display voter's selected candidates"""
-    cands = session.get('candidates')
-    if cands:
-        cands = json.loads(cands)
+    """Display voter's selected candidates"""
+    voter_selection = session.get('candidates')
+    if voter_selection:
+        voter_selection = json.loads(voter_selection)
     else:
-        cands = {}
-    return render_template('choice.html', myid=myid, cands=cands,
-                           posts=get_posts())
+        voter_selection = {}
+    return render_template('choice.html', myid=myid, cands=voter_selection,posts=get_election_posts())
 
 
 @bp.route('/vote')
 def add_votes():
     """add votes to candidates"""
-    for cand in json.loads(session['candidates']).values():
-        storage.show('Candidate', int(cand[0])).votes += 1
+    for candidate in json.loads(session['candidates']).values():
+        storage.show('Candidate', int(candidate[0])).votes += 1
     storage.show('Voter',
                  int(session['user_id'])).status = session['candidates']
     storage.save()

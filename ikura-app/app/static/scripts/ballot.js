@@ -4,16 +4,14 @@ $(document).ready(function () {
 	$('.exit').on('click', () => { window.location = "/logout"; });
 
 	$('.vote').on('click', () => {
-		message = 'This action changes your vote status to "voted"\
+		message = 'This action changes your vote status to "Voted"\
 and you will no longer be able to make vote changes'
 		const confirmation = confirm(message)
 
 		if (confirmation) {
 			$.ajax({
 				url: '/vote',
-				//type: '',
 				dataType: 'text',
-				//data: formData, 
 				success: function (data) {
 					alert(data);
 					window.location = '/logout';

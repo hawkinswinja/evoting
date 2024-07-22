@@ -18,6 +18,6 @@ $(document).ready(function() {
   });
 
 
-  $('.exit').on('click', () => { window.location = "/login"; });
+  $('.exit').on('click', () => { window.location = "/logout"; });
 
 });

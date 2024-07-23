@@ -1,4 +1,50 @@
 $(document).ready(function () {
+
+	// Get the modal
+	var modal = $("#positionsModal");
+
+	// Get the button that opens the modal
+	var btn = $("#positionsBtn");
+
+	// Get the <span> element that closes the modal
+	var span = $(".close");
+
+	// When the user clicks the button, open the modal
+	btn.on('click', function() {
+		const myid = btn.data('myid');
+		$.ajax({
+			url: '/posts',
+			method: 'GET',
+			success: function(data) {
+				var positionsList = '';
+				data.forEach(function(position) {
+					positionsList += '<li><a href="/vote/' + myid + '/' + position + '">' + position + '</a></li>';
+				});
+				positionsList += '<li><a href="/selection/' + myid + '">mychoice</a></li>';
+				console.log(positionsList);
+				modal.find('ul').html(positionsList);
+				modal.css("display", "block");
+			},
+			error: function(error) {
+				console.log("Error fetching positions:", error);
+			}
+		});
+	});
+
+	// When the user clicks on <span> (x), close the modal
+	span.on('click', function() {
+		// modal.css("width", "0");
+		modal.css("display", "none");
+	});
+
+	// When the user clicks anywhere outside of the modal, close it
+	$(window).on('click', function(event) {
+		if ($(event.target).is(modal)) {
+			modal.css("display", "none");
+		}
+	});
+
+
 	$('#results').on('click', () => { window.location = "/e-portal"; });
 
 	$('.exit').on('click', () => { window.location = "/logout"; });

@@ -1,143 +1,131 @@
-body {
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.exit {
-	width: 6%;
-	height: fit-content;
-	margin-left: 70%;
-	background-color: whitesmoke;
-	border: solid, 1px rgb(243, 60, 60);
-	border-radius: 10px;
-	color: rgb(243, 60, 60);
-    font-size: 15px;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
+/* Modal (side menu) */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 100%; 
+    overflow-x: hidden; 
+    background-color: rgba(0,0,0,0.4); 
+    transition: 0.5s;
 }
 
-.navigation {
-    width: 100%;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    flex-direction: row wrap;
-    background-color: rgb(243, 59, 59);
-}
-.navigation div {
-    width: 15%;
+.modal-content {
+    position: fixed;
+    left: 0;
+    top: auto;
+    width: auto;
     height: 100%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-.navigation h4 {
-    margin-bottom: 0%;
-    color: whitesmoke;
-}
-.popover {
-    display: none;
-    width: 80%;
-    height: 60px;
-    background-color: whitesmoke;
-	margin: 0;
+    background-color: #fefefe;
+    overflow: auto;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+    padding: 20px;
+    transition: 0.5s;
 }
 
-.posts:hover .popover{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+.modal-content ul {
     list-style-type: none;
+    padding: 0;
+}
+
+.modal-content ul li {
+    padding: 8px 16px;
+    text-align: left;
+}
+
+.modal-content ul li a {
+    text-decoration: none;
+    color: black;
+    display: block;
+    transition: 0.3s;
+}
+
+.modal-content ul li a:hover {
+    background-color: #ddd;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    font-size: 36px;
+    font-weight: bold;
+    color: #aaa;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Navigation header */
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f44336;
+    padding: 10px 20px;
+    color: white;
+}
+
+.navigation .posts {
+    display: flex;
+    align-items: center;
+}
+
+.navigation .exit {
+    background-color: white;
+    color: #f44336;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.navigation .exit:hover {
+    background-color: #ddd;
 }
 
 .ballot {
-    width: 60%;
-    height: 50vh;
-    border: 1px solid whitesmoke;
-    border-radius: 6px;
-    margin: 60px auto;
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-	background-color: whitesmoke;
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
-.instructions {
 
+.ballot h1 {
+    margin-bottom: 20px;
 }
-h1 {
-    text-align: center;
-	margin-top: 30px;
-	margin-bottom: 0;
-}
-form {
-	width: 80%;
-	height: 70%;
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-	justify-content: center;
-	margin: 30px auto;
-}
-form ul {
-	width: 80%;
-	height: 40%;
-	border: solid 1px rgb(243, 60, 60);
-	border-radius: 5px;
-    align-self: flex-start;
+
+.ballot ul {
     list-style-type: none;
-	margin: 0 auto;
-	padding-top: 20px;
+    padding: 0;
 }
-form input[type="submit"] {
-    padding:5px;
-    height: fit-content;
-    background-color: rgb(243, 59, 59);
-    color: white;
-    border-radius: 4px;
-    border: 0;
-    font-size: 15px;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
-}
-.flash-messages {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    width: 300px;
-    padding: 10px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    text-align: center;
-  }
-  
-  .flash-messages .flash-message {
+
+.ballot ul li {
     margin-bottom: 10px;
-    padding: 10px;
-  }
-  
-  .flash-messages .success {
-    color: #155724;
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-  }
-  
-  .flash-messages .info {
-    color: #0c5460;
-    background-color: #d1ecf1;
-    border-color: #bee5eb;
-  }
-  
-  .flash-messages .warning {
-    color: #856404;
-    background-color: #fff3cd;
-    border-color: #ffeeba;
-  }
-  
-  .flash-messages .error {
-    color: #721c24;
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-  }
-  
+}
+
+.ballot input[type="submit"] {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.ballot input[type="submit"]:hover {
+    background-color: #d32f2f;
+}
+
+div {
+    text-align: center;
+    margin: 20px;
+}

@@ -4,16 +4,12 @@
 <link rel="stylesheet" type="text/css" href="/static/styles/ballot.css">
 <script src="{{ url_for('static', filename='scripts/ballot.js') }}"></script>
 {% endblock %}
+
+
 {% block body %}
 <header class="navigation">
     <div class="posts">
-        <h4>Positions</h4>
-        <ul class="popover">
-            {% for position in positions %}
-            <li><a href="{{ url_for('routes.vote', myid=myid, post=position) }}">{{ position }}</a></li>
-            {% endfor %}
-            <li><a href="{{ url_for('routes.selection', myid=myid) }}">mychoice</a></li>
-        </ul>
+        <h4 id="positionsBtn" data-myid="{{ myid }}">Positions</h4>
     </div>
     <div>
         <h4 id='results'>E-results</h4>
@@ -50,5 +46,11 @@
     <h4>DO NOT LOGOUT or exit BEFORE SUBMITTING YOUR VOTES as this will remove your choices</h4>
     </p>
     Navigate to 'mychoice' under the Positions tab then click Vote
+</div>
+<div id="positionsModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <ul></ul>
+    </div>
 </div>
 {% endblock %}

@@ -181,7 +181,7 @@ def tally():
     return 'Vote successfully recorded'
 
 
-@bp.route('/<int:myid>/selection')
+@bp.route('/selection/<int:myid>')
 def selection(myid):
     """Display voter's selected candidates"""
     voter_selection = session.get('candidates')

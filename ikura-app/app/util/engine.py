@@ -9,7 +9,7 @@ from app.models import (Base, Candidate, Position, Voter)
 
 
 class Engine:
-    """alows the perfomance of CRUD operations on the database"""
+    """Allows the perfomance of CRUD operations on the database"""
     __engine = None
     __session = None
 
@@ -21,6 +21,12 @@ class Engine:
         pw = getenv('POSTGRES_PASSWORD', 'ikura')
         db = getenv('POSTGRES_DB', 'ikura')
         url = '//{}:{}@{}:{}/{}'.format(user, pw, host, port, db)
+
+        self.class_map = {
+            'Candidate': Candidate,
+            'Position': Position,
+            'Voter': Voter
+        }
 
         # if dbtype == 'mysql':
         #     port = getenv('DB_PORT', '3306')
@@ -43,7 +49,11 @@ class Engine:
 
     def all(self, cls):
         """returns all instances of object specified in cls"""
-        return (self.__session.query(eval(cls)).all())
+        class_obj = self.class_map.get(cls)
+        if class_obj:
+            return self.__session.query(class_obj).all()
+        else:
+            raise ValueError(f"Class {cls} not found")
 
     def new(self, cls, me=None):
         """
@@ -51,17 +61,20 @@ class Engine:
             string cls: class name used to create instance object
             dict me: dictionary definition for new object to create
         """
-        # do nothing when the dictionary item me is NULL
         if me is None:
-            return
+            raise ValueError("Dictionary item is missing")
         else:
-            obj = eval(cls)()
-            for k, v in me.items():
-                setattr(obj, k, v)
-        try:
-            self.__session.add(obj)
-        except Exception:  # NOT WORKING NEEDS updates!!
-            self.__session.rollback()
+            class_obj = self.class_map.get(cls)
+            if class_obj:
+                obj = class_obj()
+                for k, v in me.items():
+                    setattr(obj, k, v)
+                try:
+                    self.__session.add(obj)
+                except Exception:
+                    self.__session.rollback()
+            else:
+                raise ValueError(f"Class {cls} not found")
 
     def save(self):
         """commits the changes to database"""
@@ -70,16 +83,24 @@ class Engine:
     def delete(self, cls, id=None):
         """delete an existing record using the primary key"""
         # create object from passed class name
-        obj = eval(cls)
-        # delete all stored objects if item is missing
-        if id is None:
-            self.__session.query(obj).delete(synchronize_session=False)
+        class_obj = self.class_map.get(cls)
+        if class_obj:
+            if id is None:
+                self.__session.query(class_obj).delete(synchronize_session=False)
+            else:
+                obj = self.__session.get(class_obj, id)
+                if obj:
+                    self.__session.delete(obj)
         else:
-            # fetch an object using its primary key and delete it
-            self.__session.delete(self.show(cls, id))
+            raise ValueError(f"Class {cls} not found")
 
     def show(self, cls, cls_id):
         """returns an object using the primary key"""
-        # risky using eval -> update to use dictionary!!
-        # print(type(cls_id))
-        return self.__session.get(eval(cls), cls_id)
+        class_obj = self.class_map.get(cls)
+        if class_obj:
+            try:
+                return self.__session.get(class_obj, cls_id)
+            except Exception:
+                raise Exception("Error: Object not found")
+        else:
+            raise ValueError(f"Class {cls} not found")

@@ -200,5 +200,4 @@ def add_votes():
     storage.show('Voter',
                  int(session['user_id'])).status = session['candidates']
     storage.save()
-    # session.pop('user_id', None)
     return ('Your vote was successfully recorded')

@@ -12,12 +12,12 @@
         <h4 id="positionsBtn" data-myid="{{ myid }}">Positions</h4>
     </div>
     <div>
-        <h4 id='results'>E-results</h4>
+        <h4 id='results'>Results</h4>
     </div>
-    <button class='exit'>Exit</button>
+    <button class='exit'>Logout</button>
 </header>
 <section class="ballot">
-    <h1>Election for {{ post }}</h1>
+    <h1>Candidates for the {{ post }} Election</h1>
     <form action="/tally" id="ballot_form" method="post">
         <input type="hidden" name='voter_id' value='{{ myid }}'>
         <input type="hidden" id="position" name='post' value='{{ post }}'>
@@ -33,19 +33,19 @@
             </li>
             {% endfor %}
         </ul>
-        <em>Click the button <strong>Record Candidate</strong> to confirm your selected candidate</em>
+        <em>Click the button below to save your selection</em><br>
         <input type="submit" value="Record Candidate">
     </form>
 </section>
 <div>
-    Select Positions at the top left of this webpage to display a navigation link.<br>
+    <!-- Select Positions at the top left of this webpage to display a navigation link.<br>
     Clicking on the links will automatically load the election for the selected page
     <br>
-    You can view the results as they stream in by clicking on the E-results
+    You can view the results as they stream in by clicking on the E-results -->
     <p>
-    <h4>DO NOT LOGOUT or exit BEFORE SUBMITTING YOUR VOTES as this will remove your choices</h4>
+    To view your selected candidates for all positions, and submit your vote, click the Positions button at the top left of this page and then select <em>mychoice</em>.<br>
+    <h4>DO NOT LOGOUT BEFORE Submitting your vote on the <em>mychoice</em> page</h4>
     </p>
-    Navigate to 'mychoice' under the Positions tab then click Vote
 </div>
 <div id="positionsModal" class="modal">
     <div class="modal-content">

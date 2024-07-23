@@ -1,43 +1,49 @@
 {% extends "ballot.html" %}
-{% block head %}
-{{ super() }}
-{% endblock %}
-{% block body %}
-{{ super() }}
-{% block section %}
-    <section class="ballot">
-        <h1>Submit Votes</h1>
-        <section id="ballot_form">
-            <h3>Position&emsp;Candidate</h3>
-            {% if cands|length == 0 %}
-                <h4>Kindly select a candidate to be able to vote</h4>
-            {% else%}
-            <ul>
-            {% for post, cand in cands.items() %}
-                <li>
-                    {{post}}&nbsp;&emsp;{{cand[1]}}
-                </li>
-            {% endfor %}
-            </ul>
-            {%if not status %}
-            <em>Click the button <strong>Vote</strong> to confirm your selected candidate</em>
-            <p><button class='vote'>Vote</button></p>
-            {% else %}
-            <em>You already voted in this elections and can not vote again</em>
-            {% endif %}
-            {% endif %}
-        </section>
-    </section>
 
-<div>
+{% block body %}
+<header class="navigation">
     {% if not status %}
+    <div class="posts">
+        <h4 id="positionsBtn" data-myid="{{ myid }}">Positions</h4>
+    </div>
+    {% endif %}
+    <div><h4 id='results'>Results</h4></div>
+    <button class='exit'>Logout</button>
+</header>
+<section class="ballot">
+    <h1>Submit Votes</h1>
+    <section id="ballot_form">
+        {% if cands|length == 0 %}
+            <h4>Kindly select a candidate to be able to vote</h4>
+        {% else %}
+        <h3>Position&emsp;Candidate</h3>
+        <ul>
+            {% for post, cand in cands.items() %}
+            <li>
+                {{ post }}&nbsp;&emsp;{{ cand[1] }}
+            </li>
+            {% endfor %}
+        </ul>
+        {% if not status %}
+        <em>Click the button <strong>Vote</strong> to confirm your selected candidate</em>
+        <p><button class='vote'>Vote</button></p>
+        {% else %}
+        <em>You already voted in this election and cannot vote again</em>
+        {% endif %}
+        {% endif %}
+    </section>
+</section>
+<!-- <div>
     Select Positions at the top left of this webpage to display a navigation link.
     <br><br>
     Clicking on the links will automatically load the election for the selected page
     <br><br>
-    <h4>DO NOT LOGOUT or exit BEFORE SUBMITTING YOUR VOTES as this will remove your choices</h4>
-    {% endif %}
     You can view the results as they stream in by clicking on the E-results
+</div> -->
+<div id="positionsModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <ul></ul>
+    </div>
 </div>
-{% endblock %}
 {% endblock %}

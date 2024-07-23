@@ -35,18 +35,18 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWD }}
 
       - name: Get SHORT SHA commit
-        id: commit
-        run: echo "::set-env name=SHORT_SHA::$(git rev-parse --short HEAD)"
+        # id: commit
+        run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: ./ikura-app
           push: ${{ github.event.inputs.push == 'true' || false }}
-          tags: ${{ secrets.DOCKER_USER }}/ikura:${{ steps.commit.outputs.SHORT_SHA }}
+          tags: ${{ secrets.DOCKER_USER }}/ikura:${{ env.SHORT_SHA }}
 
       - name: Scan for vulnerabilities
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'image'
-          image-ref: 'docker.io/${{ secrets.DOCKER_USER }}/ikura:${{ steps.commit.outputs.SHORT_SHA }}'
+          image-ref: 'docker.io/${{ secrets.DOCKER_USER }}/ikura:${{ env.SHORT_SHA }}'

@@ -184,12 +184,11 @@ def tally():
 @bp.route('/selection/<int:myid>')
 def selection(myid):
     """Display voter's selected candidates"""
-    voter_selection = session.get('candidates')
-    if voter_selection:
-        voter_selection = json.loads(voter_selection)
+    if 'user_id' not in session:
+        return 'You are not logged in', 401
     else:
-        voter_selection = {}
-    return render_template('choice.html', myid=myid, cands=voter_selection,posts=get_election_posts())
+        voter_selection = json.loads(session.get('candidates', '{}'))        
+    return render_template('choice.html', myid=myid, cands=voter_selection, posts=get_election_posts())
 
 
 @bp.route('/vote')

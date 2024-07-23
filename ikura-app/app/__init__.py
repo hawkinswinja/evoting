@@ -24,7 +24,8 @@ def create_app(config_class='config.Config'):
         #     print(path)
 
         if not any(endpoint in path for endpoint in excluded_endpoints) and not session.get('user_id'):
-            return redirect(url_for('routes.login'))
+            return redirect(url_for('routes.login')), 401
+
 
     # @app.after_request
     # def after_request(response):

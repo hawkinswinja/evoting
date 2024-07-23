@@ -1,13 +1,13 @@
 $(document).ready(function () {
 
 	// Get the modal
-	var modal = $("#positionsModal");
+	let modal = $("#positionsModal");
 
 	// Get the button that opens the modal
-	var btn = $("#positionsBtn");
+	const btn = $("#positionsBtn");
 
 	// Get the <span> element that closes the modal
-	var span = $(".close");
+	const span = $(".close");
 
 	// When the user clicks the button, open the modal
 	btn.on('click', function() {
@@ -50,8 +50,7 @@ $(document).ready(function () {
 	$('.exit').on('click', () => { window.location = "/logout"; });
 
 	$('.vote').on('click', () => {
-		message = 'This action changes your vote status to "Voted"\
-and you will no longer be able to make vote changes'
+		message = 'This action changes your vote status and you will no longer be able to make vote changes'
 		const confirmation = confirm(message)
 
 		if (confirmation) {
@@ -60,10 +59,12 @@ and you will no longer be able to make vote changes'
 				dataType: 'text',
 				success: function (data) {
 					alert(data);
-					window.location = '/logout';
 				},
-				error: function (xhr, status, error) {
-					alert('Error submitting form ' + error);
+				error: function (error) {
+					alert('Error submitting form ');
+				},
+				complete: () => {
+					window.location = '/logout';
 				}
 			});
 		}

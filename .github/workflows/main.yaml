@@ -49,4 +49,4 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'image'
-          image-ref: 'docker.io/${{ secrets.DOCKER_USER }}/ikura:${{ env.SHORT_SHA }}'
+          image-ref: '${{ secrets.DOCKER_USER }}/ikura:${{ env.SHORT_SHA }}'

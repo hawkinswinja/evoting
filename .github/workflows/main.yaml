@@ -12,8 +12,8 @@ on:
   workflow_dispatch:
     inputs:
       push-image:
+        type: boolean
         description: 'Push Docker image to registry'
-        required: false
         default: false  # Default value is false for non-manual triggers
 
 jobs:
@@ -60,5 +60,5 @@ jobs:
           image-ref: '${{ secrets.DOCKER_USER }}/ikura:${{ env.SHORT_SHA }}'
 
       - name: Push Docker image
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event.inputs.push-image == 'true' }}
+        if: ${{ github.event.inputs.push-image == true }}
         run: docker push ${{ secrets.DOCKER_USER }}/ikura:${{ env.SHORT_SHA }}

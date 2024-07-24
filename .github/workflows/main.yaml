@@ -45,13 +45,6 @@ jobs:
         id: build-image
         run: |
           docker build -t ${{ secrets.DOCKER_USER }}/ikura:${{ env.SHORT_SHA }} ./ikura-app
-          docker save -o ikura-image.tar ${{ secrets.DOCKER_USER }}/ikura:${{ env.SHORT_SHA }}
-
-      - name: Upload Docker image artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: docker-image
-          path: ./ikura-image.tar
 
       - name: Scan for vulnerabilities
         uses: aquasecurity/trivy-action@master
